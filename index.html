@@ -2344,7 +2344,7 @@ function closeSidebar() {
         }
     }
 
-    // --- 2. HIGH-SPEED REALISTIC STARLIGHT ENGINE ---
+    // --- 2. OPTIMIZED AMBIENT STARLIGHT ENGINE ---
     const canvas = document.getElementById('starCanvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -2353,9 +2353,9 @@ function closeSidebar() {
         let stars = [];
         let shootingStar = null;
 
-        // Configuration
-        const STAR_COUNT = 220; // Taadad badha di hai
-        const STAR_SPEED = 0.5;  // Speed fast kar di hai (pehle 0.08 thi)
+        // Balanced Configuration (Focus stays on Portfolio Content)
+        const STAR_COUNT = 90;   // Reduced count for clean look
+        const STAR_SPEED = 0.12;  // Slow, smooth & elegant floating motion
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -2372,21 +2372,22 @@ function closeSidebar() {
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.size = Math.random() < 0.8 ? Math.random() * 1.5 : Math.random() * 2.8 + 0.8;
+                // Mostly tiny dots, few medium stars
+                this.size = Math.random() < 0.85 ? Math.random() * 1.2 : Math.random() * 1.8 + 0.5;
                 
-                // Fast and smooth multi-directional movement
+                // Slow ambient drift
                 this.speedX = (Math.random() - 0.5) * STAR_SPEED;
                 this.speedY = (Math.random() - 0.5) * STAR_SPEED;
                 
-                this.opacity = Math.random();
-                this.twinkleFactor = (Math.random() - 0.5) * 0.03; // Dynamic twinkle
+                this.opacity = Math.random() * 0.5 + 0.2; // Softer max opacity
+                this.twinkleFactor = (Math.random() - 0.5) * 0.012; // Gentle twinkle
             }
 
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Screen Wrap (Seamless loop)
+                // Screen Wrap
                 if (this.x < 0) this.x = width;
                 if (this.x > width) this.x = 0;
                 if (this.y < 0) this.y = height;
@@ -2394,7 +2395,7 @@ function closeSidebar() {
 
                 // Twinkle Logic
                 this.opacity += this.twinkleFactor;
-                if (this.opacity > 1 || this.opacity < 0.15) {
+                if (this.opacity > 0.75 || this.opacity < 0.15) {
                     this.twinkleFactor = -this.twinkleFactor;
                 }
             }
@@ -2403,21 +2404,12 @@ function closeSidebar() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-
-                // Soft Neon Cyan Glow for bigger stars
-                if (this.size > 2) {
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#06b6d4';
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-
                 ctx.fill();
                 ctx.closePath();
             }
         }
 
-        // Bonus: Shooting Star Effect
+        // Subtler Shooting Star Effect
         class ShootingStar {
             constructor() {
                 this.reset();
@@ -2425,10 +2417,10 @@ function closeSidebar() {
 
             reset() {
                 this.x = Math.random() * width;
-                this.y = Math.random() * (height / 2);
-                this.length = Math.random() * 80 + 50;
-                this.speed = Math.random() * 10 + 6;
-                this.size = Math.random() * 1 + 0.1;
+                this.y = Math.random() * (height / 3);
+                this.length = Math.random() * 60 + 40;
+                this.speed = Math.random() * 6 + 4;
+                this.size = Math.random() * 0.8 + 0.2;
                 this.active = true;
             }
 
@@ -2447,7 +2439,7 @@ function closeSidebar() {
                 ctx.save();
                 ctx.beginPath();
                 const gradient = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y - this.length);
-                gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
                 gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 
                 ctx.strokeStyle = gradient;
@@ -2467,7 +2459,6 @@ function closeSidebar() {
         }
 
         function animateStars() {
-            // Dark space background clear
             ctx.fillStyle = '#020617';
             ctx.fillRect(0, 0, width, height);
 
@@ -2476,8 +2467,8 @@ function closeSidebar() {
                 star.draw();
             });
 
-            // Trigger shooting star randomly
-            if (!shootingStar && Math.random() < 0.008) {
+            // Occasional gentle shooting star
+            if (!shootingStar && Math.random() < 0.004) {
                 shootingStar = new ShootingStar();
             }
 
