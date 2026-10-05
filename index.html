@@ -1,2517 +1,1182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muskan Mushtaq | .NET & PHP Developer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <title>Muskan Mushtaq | Full Stack Web Developer</title>
 
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --accent: #06b6d4;
-            --dark: #0f172a;
-            --darker: #020617;
-            --card: #1e293b;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #10b981;
-            --gold: #f59e0b;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--darker);
-            color: var(--light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-/* Starry Space Background Effect */
-/* Retain your existing cosmic glows, but make stars invisible here */
-.bg-pattern {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.6;
-    background-image: 
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
-}
-
-#starCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* Isay -1 rakhein taake background par rahe */
-    background: #020617; /* Dark space background */
-    pointer-events: none; /* Mouse clicks ko portfolio content tak jaane de */
-}
-        /* Video Modal */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 6, 23, 0.98);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .video-modal.active {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .video-box {
-            width: 100%;
-            max-width: 900px;
-            background: var(--card);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .video-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .video-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--light);
-        }
-
-        .close-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(239, 68, 68, 0.2);
-            border: none;
-            color: #ef4444;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-btn:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .video-wrapper video {
-            width: 100%;
-            display: block;
-        }
-
-        /* ===== PROFESSIONAL NAVIGATION ===== */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 16px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--light);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 10px 24px;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Mobile Toggle Button */
-        .mobile-toggle {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid var(--border);
-            color: var(--light);
-            font-size: 18px;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .mobile-toggle:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        /* ===== MOBILE SIDEBAR MENU ===== */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 6, 23, 0.8);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            max-width: 85vw;
-            height: 100%;
-            background: var(--card);
-            z-index: 1001;
-            padding: 80px 30px 30px;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar.active {
-            right: 0;
-        }
-
-        .sidebar-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .sidebar-close:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .sidebar-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .sidebar-links li a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 18px;
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        .sidebar-links li a i {
-            width: 24px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        .sidebar-links li a:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--light);
-        }
-
-        .sidebar-links li a.active {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.1));
-            color: var(--primary);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .sidebar-cta {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-
-        .sidebar-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-        }
-
-        .sidebar-social {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 20px;
-        }
-
-        .sidebar-social a {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-            font-size: 16px;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-/* Mobile Sidebar Styles */
-@media (max-width: 900px) {
-    .mobile-toggle {
-        display: block; /* Button show karein */
-        font-size: 1.5rem;
-        color: white;
-        background: none;
-        border: none;
-        cursor: pointer;
-        z-index: 2000; /* Sab se upar */
-    }
-
-    .nav-links {
-        position: fixed;
-        top: 0;
-        right: -100%; /* Default hidden position (screen se bahar) */
-        width: 280px; /* Sidebar ki width */
-        height: 100vh;
-        background: #11111b; /* Dark sleek background */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 30px;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1500;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-    }
-
-    /* Jab JS se "active" class add hogi */
-    .nav-links.active {
-        right: 0; /* Screen par slide ho jaye */
-    }
-
-    .nav-links li a {
-        font-size: 1.2rem;
-        color: white !important;
-        font-weight: 500;
-        text-decoration: none;
-    }
-}
-@media (max-width: 900px) {
-    /* Sidebar footer ko flex-box banayein centering ke liye */
-    .sidebar-footer {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Horizontal center */
-        justify-content: center;
-        width: 100%;
-        margin-top: 30px; /* Links se thora gap */
-        text-align: center;
-    }
-
-    /* Hire Me Button ka specific style */
-    .sidebar-cta {
-        display: inline-block;
-        margin: 0 auto 20px auto; /* Center alignment and bottom spacing */
-        width: fit-content;
-        min-width: 160px; /* Professional width */
-        text-align: center;
-    }
-
-    /* Social icons ko bhi center rakhein */
-    .sidebar-social {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-}
-        .sidebar-social a:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 5% 80px;
-            gap: 60px;
-        }
-
-        .hero-content {
-            flex: 1;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--primary);
-            margin-bottom: 24px;
-        }
-
-        .badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 16px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-role {
-            font-size: 20px;
-            color: var(--gray);
-            margin-bottom: 24px;
-        }
-
-        .hero-role span {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .hero-desc {
-            color: var(--gray);
-            font-size: 16px;
-            max-width: 480px;
-            margin-bottom: 24px;
-        }
-
-        /* Achievement Pills */
-        .achievements-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 32px;
-        }
-
-        .achievement-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .achievement-pill.gold {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: var(--gold);
-        }
-
-        .achievement-pill.green {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--success);
-        }
-
-        .achievement-pill:hover {
-            transform: translateY(-2px);
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 14px 32px;
-            border-radius: 10px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            padding: 14px 32px;
-            border-radius: 10px;
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s;
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-
-        .image-card {
-            width: 380px;
-            height: 480px;
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-
-        .image-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .float-tag {
-            position: absolute;
-            background: rgba(15, 23, 42, 0.95);
-            padding: 10px 18px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            font-size: 13px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .tag-1 { top: 20px; right: -20px; color: #10b981; }
-        .tag-2 { bottom: 100px; left: -30px; color: var(--secondary); }
-        .tag-3 { bottom: 20px; right: 20px; color: var(--accent); }
-
-        /* Section Styles */
-        section {
-            padding: 80px 5%;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-tag {
-            display: inline-block;
-            color: var(--primary);
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-size: 40px;
-            font-weight: 800;
-            margin-bottom: 16px;
-        }
-
-        .section-title span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-desc {
-            color: var(--gray);
-            font-size: 16px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* About Section */
-        .about {
-            background: linear-gradient(180deg, var(--darker) 0%, rgba(99, 102, 241, 0.03) 50%, var(--darker) 100%);
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .about-image {
-            position: relative;
-        }
-
-        .about-img-box {
-            width: 100%;
-            max-width: 450px;
-            height: 550px;
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-
-        .about-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .exp-float {
-            position: absolute;
-            bottom: 30px;
-            right: -20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 20px 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
-        }
-
-        .exp-float .num {
-            font-size: 36px;
-            font-weight: 700;
-            display: block;
-        }
-
-        .exp-float .txt {
-            font-size: 13px;
-            opacity: 0.9;
-        }
-
-        .about-content h3 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-
-        .about-content h3 span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .about-text {
-            color: var(--gray);
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .qualification-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .qual-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .qual-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .qual-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .qual-item div strong {
-            color: var(--light);
-            display: block;
-        }
-
-        .qual-item div span {
-            color: var(--gray);
-            font-size: 13px;
-        }
-
-        .highlight-box {
-            background: rgba(99, 102, 241, 0.1);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 0 12px 12px 0;
-            margin: 24px 0;
-        }
-
-        .highlight-box p {
-            color: var(--light);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .highlight-box strong {
-            color: var(--primary);
-        }
-
-        .about-achievements {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .about-achievements .achievement-pill {
-            font-size: 12px;
-            padding: 8px 14px;
-        }
-
-        .about-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 32px;
-        }
-
-        .about-stat {
-            text-align: center;
-            padding: 20px;
-            background: var(--card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        .about-stat:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .about-stat .num {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-        }
-
-        .about-stat .lbl {
-            font-size: 13px;
-            color: var(--gray);
-            margin-top: 4px;
-        }
-
-        /* Projects Grid */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            background: var(--card);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.4s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .project-media {
-            position: relative;
-            height: 260px;
-            overflow: hidden;
-        }
-
-        .project-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .project-card:hover .project-media img {
-            transform: scale(1.05);
-        }
-
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 24px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .project-card:hover .project-overlay {
-            opacity: 1;
-        }
-
-        .play-btn {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            margin-bottom: 16px;
-            border: none;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .tech-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tech-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: var(--light);
-        }
-
-        .project-info {
-            padding: 24px;
-        }
-
-        .project-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .project-name {
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .project-type {
-            font-size: 12px;
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-
-        .project-desc {
-            color: var(--gray);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .project-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .btn-watch {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
-        .btn-watch:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-code {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--light);
-            border: 1px solid var(--border);
-        }
-
-        .btn-code:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-
-
-
-/* 1. Sabse pehle grid ka default (Desktop) */
-.projects-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* Hamesha 2 columns */
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* 2. Responsive adjustments */
-@media (max-width: 1024px) {
-    /* Is range mein bhi 2 columns hi rahenge */
-    .projects-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 20px;
-        padding: 0 15px;
-    }
-}
-
-@media (max-width: 900px) {
-    /* 900px par bhi 2 columns barkarar */
-    .projects-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-}
-
-/* 3. Sirf 800px se niche single column hoga */
-@media (max-width: 800px) {
-    .projects-grid {
-        grid-template-columns: 1fr !important; /* Ab 1 card ayega */
-        padding: 0 10px;
-    }
-    
-    .project-card {
-        max-width: 500px; /* Card mobile par bohat zyada phail na jaye */
-        margin: 0 auto;
-    }
-}
-        /* ===== PROFESSIONAL SKILLS SECTION ===== */
-        .skills-container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .skills-main-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .skill-category {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            transition: all 0.4s ease;
-        }
-
-        .skill-category:hover {
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .skill-category-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 28px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .skill-category-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .skill-category-icon.blue {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-        }
-
-        .skill-category-icon.pink {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-        }
-
-        .skill-category-icon.cyan {
-            background: linear-gradient(135deg, #06b6d4, #0891b2);
-        }
-
-        .skill-category-icon.green {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-
-        .skill-category-title {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .skill-category-title span {
-            display: block;
-            font-size: 13px;
-            color: var(--gray);
-            font-weight: 500;
-            margin-top: 2px;
-        }
-
-        .skill-bar-item {
-            margin-bottom: 22px;
-        }
-
-        .skill-bar-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .skill-bar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .skill-bar-name {
-            font-size: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .skill-bar-name i {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-        }
-
-        .skill-bar-percent {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .skill-bar-track {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .skill-bar-fill {
-            height: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0;
-            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .skill-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
-            border-radius: 10px;
-        }
-
-        .skill-bar-fill.php-bar {
-            background: linear-gradient(90deg, #777bb4, #4f5b93);
-        }
-
-        .skill-bar-fill.csharp-bar {
-            background: linear-gradient(90deg, #9b4f96, #68217a);
-        }
-
-        .skill-bar-fill.sql-bar {
-            background: linear-gradient(90deg, #f29111, #e76f00);
-        }
-
-        .skill-bar-fill.react-bar {
-            background: linear-gradient(90deg, #61dafb, #282c34);
-        }
-
-        .skill-bar-fill.git-bar {
-            background: linear-gradient(90deg, #f05032, #bd2c00);
-        }
-
-        /* Skills Summary Cards */
-        .skills-summary {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .skill-summary-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 28px 20px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .skill-summary-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .skill-summary-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            margin: 0 auto 14px;
-        }
-
-        .skill-summary-card h4 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .skill-summary-card p {
-            font-size: 13px;
-            color: var(--gray);
-        }
-
-        /* Contact Section */
-        .contact-box {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card);
-            border-radius: 20px;
-            padding: 60px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .contact-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .contact-title span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .contact-text {
-            color: var(--gray);
-            margin-bottom: 40px;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .contact-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: var(--primary);
-            transition: all 0.3s;
-        }
-
-        .contact-item:hover .contact-icon {
-            background: var(--primary);
-            color: white;
-        }
-
-        .contact-item a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-
-        .contact-item:hover a {
-            color: var(--light);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .social-btn {
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-            font-size: 20px;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .social-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            transform: translateY(-4px);
-        }
-
-        /* Footer */
-        footer {
-            padding: 40px 5%;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        footer span {
-            color: var(--secondary);
-        }
-
-     /* ===== RESPONSIVE DESIGN ===== */
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 1024px) {
-    /* Hero Section Fix */
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 80px 5% 40px; /* Padding kam ki takay gap kam ho */
-        height: auto !important; /* Height auto ki takay extra space na bne */
-        min-height: auto; 
-        gap: 20px; /* Image aur content ke beech ka gap */
-    }
-
-    .hero-content {
-        max-width: 700px; /* Content ko bohat zyada phailne se roka */
-        margin: 0 auto;
-    }
-
-    .hero-image {
-        order: -1;
-        margin-bottom: 0; /* Extra margin khatam */
-    }
-
-    .image-card {
-        width: 280px; /* Size thora chota kiya takay compact lage */
-        height: 350px;
-        margin: 0 auto;
-    }
-
-    /* About Section Fix */
-    .about-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 30px;
-    }
-
-    .about-content {
-        max-width: 750px; /* Text ko screen ke kinaray tak jane se roka */
-        margin: 0 auto; /* Center alignment */
-    }
-
-    .about-image {
-        order: -1;
-    }
-
-    .about-img-box {
-        margin: 0 auto;
-        max-width: 320px; 
-        height: 400px;
-    }
-
-    /* Projects Grid: 800px tak 2 columns rahain gy */
-    .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-        padding: 0 10px;
-    }
-
-    .skills-main-grid { grid-template-columns: 1fr; }
-    .skills-summary { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* Tablet & Smaller Screens (800px) */
-@media (max-width: 800px) {
-    .projects-grid {
-        grid-template-columns: 1fr; /* Yahan single column hoga */
-    }
-    
-    .hero h1 { font-size: 32px; }
-}
-
-/* FINAL BREAKPOINT: Yahan 800px par grid change hoga */
-@media (max-width: 800px) {
-    .projects-grid {
-        grid-template-columns: 1fr; /* Ab 800px par 1 card ayega */
-    }
-
-    .hero h1 { font-size: 32px; }
-    .section-title { font-size: 28px; }
-    
-    .project-actions {
-        flex-direction: column; /* Mobile par buttons upar niche ache lagte hain */
-    }
-    
-    .action-btn { width: 100%; }
-}
-
-@media (max-width: 480px) {
-    .hero h1 { font-size: 28px; }
-    .hero-buttons { flex-direction: column; }
-    .contact-box { padding: 30px 16px; }
-}
-
-@media (max-width: 900px) {
-    /* Purani desktop links ko mobile par hide karein */
-    .nav-links, .nav-cta {
-        display: none !important;
-    }
-
-    /* Toggle button show karein */
-    .mobile-toggle {
-        display: block;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-    /* Sidebar logic */
-    .sidebar {
-        display: flex;
-        position: fixed;
-        top: 0;
-        right: -100%; /* Hidden by default */
-        width: 280px;
-        height: 100vh;
-        background: #0f172a;
-        z-index: 10000;
-        transition: 0.4s ease;
-        flex-direction: column;
-        align-items: center; /* Centering everything */
-        justify-content: center;
-    }
-
-    .sidebar.active {
-        right: 0;
-    }
-
-    .sidebar-overlay.active {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-    }
-}
-        @media (max-width: 480px) {
-            .hero {
-                padding: 100px 4% 60px;
-            }
-
-            section {
-                padding: 60px 4%;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .btn-primary, .btn-secondary {
-                padding: 12px 24px;
-                font-size: 14px;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .achievement-pill {
-                font-size: 11px;
-                padding: 8px 12px;
-            }
-
-            .contact-box {
-                padding: 30px 16px;
-            }
-
-            .contact-title {
-                font-size: 26px;
-            }
-        }
-
-        /* Scroll Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-            @media (max-width: 900px) {
-    .skills-main-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-links {
-        flex-direction: column;
-        gap: 20px;
-    }
-}
-
-/* Animation for Skill Bars */
-.skill-bar-fill {
-    /* Agar JS use nahi kar rahi toh width inline HTML mein dedi hai */
-    transition: width 1.5s ease-in-out;
-}
-    </style>
-</head>
-<body>
-    <!-- Background -->
- <!-- Background Pattern (Nebula glows retain) -->
-<div class="bg-pattern"></div>
-
-<!-- Canvas for Moving Stars -->
-<canvas id="starCanvas"></canvas>
-
-<div class="video-modal" id="videoModal">
-    <div class="video-box">
-        <div class="video-header">
-            <div class="video-title" id="videoTitle">Project Demo</div>
-            <button class="close-btn" onclick="closeVideo()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="video-wrapper">
-            <video id="demoVideo" controls>
-                <source src="" type="video/mp4">
-            </video>
-        </div>
-    </div>
-</div>
-
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMenu()"></div>
-
-<div class="sidebar" id="sidebar">
-    <button class="sidebar-close" onclick="toggleMenu()">
-        <i class="fas fa-times"></i>
-    </button>
-    <ul class="sidebar-links">
-        <li><a href="#home" onclick="toggleMenu()"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#about" onclick="toggleMenu()"><i class="fas fa-user"></i> About</a></li>
-        <li><a href="#projects" onclick="toggleMenu()"><i class="fas fa-briefcase"></i> Projects</a></li>
-        <li><a href="#skills" onclick="toggleMenu()"><i class="fas fa-code"></i> Skills</a></li>
-        <li><a href="#contact" onclick="toggleMenu()"><i class="fas fa-envelope"></i> Contact</a></li>
-    </ul>
-    <div class="sidebar-footer">
-        <a href="#contact" class="sidebar-cta" onclick="toggleMenu()">Hire Me</a>
-        <div class="sidebar-social">
-            <a href="https://www.linkedin.com/in/muskan-mushtaq/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://github.com/muskan2006955-dotcom" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="https://x.com/muskan2006955" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://wa.me/923342084947" target="_blank"><i class="fab fa-whatsapp"></i></a>
-        </div>
-    </div>
-</div>
-
-<nav>
-    <div class="logo">Portfolio</div>
-    <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#contact">Contact</a></li>
-    </ul>
-    
-    <div class="nav-right">
-        <a href="#contact" class="nav-cta">Hire Me</a>
-        <button class="mobile-toggle" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-</nav>
-
-<!-- Hero Section -->
-<section class="hero" id="home">
-    <div class="hero-content">
-        <div class="badge">Available for Work</div>
-        <h1>Hi, I'm <span>Muskan Mushtaq</span></h1>
-        <div class="hero-role">
-            I'm a <span id="typing">Full-Stack Web Developer</span>
-        </div>
-        <p class="hero-desc">
-            Passionate Software Developer specializing in .NET Core, PHP, and Full-Stack Web Development. Experienced through remote industry internships and real-world client projects.
-        </p>
-        
-        <!-- Achievements Row -->
-        <div class="achievements-row">
-            <div class="achievement-pill blue">
-                <i class="fas fa-briefcase"></i>
-                2 Internships Completed
-            </div>
-            <div class="achievement-pill green">
-                <i class="fas fa-handshake"></i>
-                Client Project Delivered
-            </div>
-            <div class="achievement-pill gold">
-                <i class="fas fa-crown"></i>
-                Student of the Month
-            </div>
-        </div>
-
-        <div class="hero-buttons">
-            <a href="Muskan_Mushtaq_Resume.pdf" target="_blank" download="Muskan_Mushtaq_Resume.pdf" class="btn-primary">
-                <i class="fas fa-download"></i> Download CV
-            </a>
-            <a href="#projects" class="btn-secondary">
-                <i class="fas fa-eye"></i> View Work
-            </a>
-        </div>
-    </div>
-    <div class="hero-image">
-        <div class="image-card">
-            <img src="assets/OIP (1).webp" alt="Muskan Mushtaq">
-            <div class="float-tag tag-1">
-                <i class="fas fa-check-circle"></i> .NET Core
-            </div>
-            <div class="float-tag tag-2">
-                <i class="fas fa-certificate"></i> Internships
-            </div>
-            <div class="float-tag tag-3">
-                <i class="fas fa-briefcase"></i> Client Project
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="about" id="about">
-    <div class="about-container">
-        <div class="about-image reveal">
-            <div class="about-img-box">
-                <img src="assets/p3.webp" alt="Muskan Mushtaq">
-                <div class="exp-float">
-                    <span class="num">2</span>
-                    <span class="txt">Internships Done</span>
-                </div>
-            </div>
-        </div>
-        <div class="about-content reveal">
-            <div class="section-tag">About Me</div>
-            <h3>Passionate <span>Developer</span> in Making</h3>
-            <p class="about-text">
-                I am a dedicated Software Developer currently pursuing Advanced Diploma in Software Engineering at Aptech Computer Education. My journey in tech is driven by passion for creating efficient, scalable solutions.
-            </p>
-            
-            <div class="qualification-box">
-                <div class="qual-item">
-                    <div class="qual-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <div>
-                        <strong>Web Development Intern</strong>
-                        <span>FentixTech | Remote (June 2026 – July 2026)</span>
-                    </div>
-                </div>
-                <div class="qual-item">
-                    <div class="qual-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div>
-                        <strong>Software Developer Intern</strong>
-                        <span>NexSoft Solutions | Remote</span>
-                    </div>
-                </div>
-                <div class="qual-item">
-                    <div class="qual-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <strong>Advanced Diploma in Software Engineering</strong>
-                        <span>Aptech Computer Education | 2024 - Present</span>
-                    </div>
-                </div>
-                <div class="qual-item">
-                    <div class="qual-icon">
-                        <i class="fas fa-university"></i>
-                    </div>
-                    <div>
-                        <strong>2nd Year Commerce</strong>
-                        <span>Intermediate Qualification | Completed</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="highlight-box">
-                <p><strong>Client Experience:</strong> Successfully developed and delivered E-Commerce project using .NET framework for a real client. Project included full product catalog, shopping cart, payment integration, and admin dashboard.</p>
-            </div>
-
-            <!-- About Achievements -->
-            <div class="about-achievements">
-                <div class="achievement-pill gold">
-                    <i class="fas fa-crown"></i> Student of the Month
-                </div>
-                <div class="achievement-pill green">
-                    <i class="fas fa-handshake"></i> Client Project Delivered
-                </div>
-                <div class="achievement-pill blue">
-                    <i class="fas fa-certificate"></i> Double Internship
-                </div>
-            </div>
-
-         <div class="about-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%;">
-    <div class="about-stat" style="padding: 10px 4px;">
-        <span class="num" style="font-size: 20px;">2</span>
-        <span class="lbl" style="font-size: 11px;">Internships</span>
-    </div>
-    <div class="about-stat" style="padding: 10px 4px;">
-        <span class="num" style="font-size: 20px;">1</span>
-        <span class="lbl" style="font-size: 11px;">Client Project</span>
-    </div>
-    <div class="about-stat" style="padding: 10px 4px;">
-        <span class="num" style="font-size: 20px;">30+</span>
-        <span class="lbl" style="font-size: 11px;">Projects Built</span>
-    </div>
-    <div class="about-stat" style="padding: 10px 4px;">
-        <span class="num" style="font-size: 20px;">90%</span>
-        <span class="lbl" style="font-size: 11px;">.NET CORE</span>
-    </div>
-</div>
-        </div>
-    </div>
-</section>
-
-
-    <!-- Projects -->
-    <section id="projects">
-        <div class="section-header reveal">
-            <div class="section-tag">Portfolio</div>
-            <h2 class="section-title">Featured <span>Projects</span></h2>
-            <p class="section-desc">Click play to watch project demos</p>
-        </div>
-
-        <div class="projects-grid">
-            <!-- Project 1: E-Commerce (Client Project) -->
-            <div class="project-card reveal">
-                <div class="project-media">
-                    <img src="assets/bag3.png" alt="E-Commerce Project">
-                    <div class="project-overlay">
-                        <button class="play-btn" onclick="openVideo('assets/bag2.mp4', 'E-Commerce Platform - Client Project')">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="tech-tags">
-                            <span class="tech-tag">.NET</span>
-                            <span class="tech-tag">C#</span>
-                            <span class="tech-tag">SQL Server</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-info">
-                    <div class="project-meta">
-                        <h3 class="project-name">E-Commerce Platform</h3>
-                        <span class="project-type" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Client Project</span>
-                    </div>
-                    <p class="project-desc">
-                        Complete e-commerce solution developed for client using .NET framework. Features product catalog, cart, checkout, payment integration, and admin dashboard.
-                    </p>
-                    <div class="project-actions">
-                        <button class="action-btn btn-watch" onclick="openVideo('assets/bag2.mp4', 'E-Commerce Platform - Client Project')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                        <a href="https://github.com/muskan2006955-dotcom/stylebags-ecommerce" class="action-btn btn-code" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 2: Bus Reservation -->
-            <div class="project-card reveal">
-                <div class="project-media">
-                    <img src="assets/bus1.png" alt="Bus Reservation">
-                    <div class="project-overlay">
-                        <button class="play-btn" onclick="openVideo('assets/bus.mp4', 'Bus Reservation System')">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="tech-tags">
-                            <span class="tech-tag">.NET Core</span>
-                            <span class="tech-tag">MVC</span>
-                            <span class="tech-tag">SQL Server</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-info">
-                    <div class="project-meta">
-                        <h3 class="project-name">Bus Reservation</h3>
-                        <span class="project-type">.NET Project</span>
-                    </div>
-                    <p class="project-desc">
-                        Online ticket booking system with seat selection, payment gateway, and comprehensive admin dashboard for route management.
-                    </p>
-                    <div class="project-actions">
-                        <button class="action-btn btn-watch" onclick="openVideo('assets/bus.mp4', 'Bus Reservation System')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                        <a href="https://github.com/muskan2006955-dotcom/DigitalBusReservationSystem" class="action-btn btn-code" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Project 5: Cafe Management -->
-         <div class="project-card reveal">
-    <div class="project-media">
-        <img src="assets/AI_InterviwerPic.png" alt="AI Interviewer Platform">
-        <div class="project-overlay">
-            <button class="play-btn" onclick="openVideo('assets/AI_InterviwerVedio.mp4', 'AI Interviewer Platform')">
-                <i class="fas fa-play"></i>
-            </button>
-            <div class="tech-tags">
-                <span class="tech-tag">.NET Core</span>
-                <span class="tech-tag">SQL Server</span>
-                <span class="tech-tag">Gemini AI</span>
-                <span class="tech-tag">Bootstrap</span>
-            </div>
-        </div>
-    </div>
-    <div class="project-info">
-        <div class="project-meta">
-            <h3 class="project-name">AI Interviewer</h3>
-            <span class="project-type">Full-Stack .NET Project</span>
-        </div>
-        <p class="project-desc">
-            An advanced, real-time mock interview simulator powered by the Gemini AI core. Features interactive technical & HR rounds, custom stack configurations, deep neural performance analytics, and session logs management. Built with ASP.NET Core and SQL Server.
-        </p>
-        <div class="project-actions">
-            <button class="action-btn btn-watch" onclick="openVideo('assets/AI_InterviwerVedio.mp4', 'AI Interviewer Platform')">
-                <i class="fas fa-play"></i> Watch Demo
-            </button>
-            <a href="https://github.com/muskan2006955-dotcom/AI-Interviewer-Platform.git" class="action-btn btn-code" target="_blank">
-                <i class="fab fa-github"></i> Code
-            </a>
-        </div>
-    </div>
-</div>
-            <!-- Project 3: Shop Nova -->
-            <div class="project-card reveal">
-                <div class="project-media">
-                    <img src="assets/shop1.jpeg" alt="Shop Nova">
-                    <div class="project-overlay">
-                        <button class="play-btn" onclick="openVideo('shop.mp4', 'ShopNova')">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="tech-tags">
-                            <span class="tech-tag">PHP</span>
-                            <span class="tech-tag">MySQL</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-info">
-                    <div class="project-meta">
-                        <h3 class="project-name">ShopNova</h3>
-                        <span class="project-type">PHP Project</span>
-                    </div>
-                    <p class="project-desc">
-                        E-commerce platform with product management, cart system, user authentication, and order processing. Built with PHP and MySQL.
-                    </p>
-                    <div class="project-actions">
-                        <button class="action-btn btn-watch" onclick="openVideo('assets/shop.mp4', 'ShopNova')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                        <a href="https://github.com/muskan2006955-dotcom/ClothNova-ECommerce-PHP" class="action-btn btn-code" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-   
-
-         <!-- Project 4: Courier Management -->
-            <div class="project-card reveal">
-                <div class="project-media">
-                    <img src="assets/courier1.png" alt="Courier Management">
-                    <div class="project-overlay">
-                        <button class="play-btn" onclick="openVideo('courier.mp4', 'Courier Management System')">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="tech-tags">
-                            <span class="tech-tag">PHP</span>
-                            <span class="tech-tag">MySQL</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-info">
-                    <div class="project-meta">
-                        <h3 class="project-name">Courier Management</h3>
-                        <span class="project-type">PHP Project</span>
-                    </div>
-                    <p class="project-desc">
-                        Courier and parcel management system with tracking, delivery status, billing, and reporting. Built with PHP and MySQL.
-                    </p>
-                    <div class="project-actions">
-                        <button class="action-btn btn-watch" onclick="openVideo('assets/courier.mp4', 'Courier Management System')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                        <a href="https://github.com/muskan2006955-dotcom/SwiftPost-PHP-Courier" class="action-btn btn-code">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 6: Gym Management -->
-            <div class="project-card reveal">
-                <div class="project-media">
-                    <img src="assets/gym1.png" alt="Gym Management">
-                    <div class="project-overlay">
-                        <button class="play-btn" onclick="openVideo('gym.mp4', 'Gym Management System')">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="tech-tags">
-                            <span class="tech-tag">PHP</span>
-                            <span class="tech-tag">MySQL</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-info">
-                    <div class="project-meta">
-                        <h3 class="project-name">Gym Management</h3>
-                        <span class="project-type">PHP Project</span>
-                    </div>
-                    <p class="project-desc">
-                        Fitness center management system with member tracking, subscription plans, attendance system, and payment management.
-                    </p>
-                    <div class="project-actions">
-                        <button class="action-btn btn-watch" onclick="openVideo('assets/gym.mp4', 'Gym Management System')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                        <a href="https://github.com/muskan2006955-dotcom/fitness-club-website" class="action-btn btn-code" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== PROFESSIONAL SKILLS SECTION ===== -->
-    <section id="skills">
-    <div class="section-header reveal">
-        <div class="section-tag">Expertise</div>
-        <h2 class="section-title">Technical <span>Skills</span></h2>
-        <p class="section-desc">Technologies I specialize in with proficiency levels</p>
-    </div>
-
-    <div class="skills-container">
-        <div class="skills-main-grid">
-            <div class="skill-category reveal">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon blue">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="skill-category-title">
-                        Backend Development
-
-
-                        <span>Server-side technologies</span>
-                    </div>
-                </div>
-                
-                <div class="skill-bar-item">
-                    <div class="skill-bar-header">
-                        <div class="skill-bar-name">
-                            <i class="fab fa-microsoft"></i> .NET / C#
-                        </div>
-                        <div class="skill-bar-percent">90%</div>
-                    </div>
-                    <div class="skill-bar-track">
-                        <div class="skill-bar-fill csharp-bar" style="width: 90%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-bar-item">
-                    <div class="skill-bar-header">
-                        <div class="skill-bar-name">
-                            <i class="fab fa-php"></i> PHP / Laravel
-                        </div>
-                        <div class="skill-bar-percent">85%</div>
-                    </div>
-                    <div class="skill-bar-track">
-                        <div class="skill-bar-fill php-bar" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon cyan">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="skill-category-title">
-                        Frontend & Database
-                        <span>UI and Data Management</span>
-                    </div>
-                </div>
-
-                <div class="skill-bar-item">
-                    <div class="skill-bar-header">
-                        <div class="skill-bar-name">
-                            <i class="fab fa-html5"></i> HTML / CSS / JS
-                        </div>
-                        <div class="skill-bar-percent">88%</div>
-                    </div>
-                    <div class="skill-bar-track">
-                        <div class="skill-bar-fill" style="width: 88%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-bar-item">
-                    <div class="skill-bar-header">
-                        <div class="skill-bar-name">
-                            <i class="fab fa-react"></i> React JS
-                        </div>
-                        <div class="skill-bar-percent">70%</div>
-                    </div>
-                    <div class="skill-bar-track">
-                        <div class="skill-bar-fill react-bar" style="width: 70%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-bar-item">
-                    <div class="skill-bar-header">
-                        <div class="skill-bar-name">
-                            <i class="fas fa-database"></i> SQL Server / MySQL
-                        </div>
-                        <div class="skill-bar-percent">85%</div>
-                    </div>
-                    <div class="skill-bar-track">
-                        <div class="skill-bar-fill sql-bar" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="contact">
-    <div class="contact-box reveal">
-        <h2 class="contact-title">Let's Work <span>Together</span></h2>
-        <p class="contact-text">
-            I'm actively seeking opportunities in software development. 
-            Ready to contribute my skills in .NET, PHP, and full-stack development to your team.
-        </p>
-
-        <div class="contact-links">
-            <div class="contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <a href="mailto:muskan2006955@gmail.com">muskan2006955@gmail.com</a>
-            </div>
-
-            <div class="contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-phone"></i>
-                </div>
-                <a href="tel:+923342084947">+92 334 2084947</a>
-            </div>
-
-            <div class="contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <a href="#">Karachi, Pakistan</a>
-            </div>
-        </div>
-
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/muskan-mushtaq/" class="social-btn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://github.com/muskan2006955-dotcom" class="social-btn" target="_blank"><i class="fab fa-github"></i></a>
-<a href="https://wa.me/923342084947?text=Hi%20Muskan,%20I%20saw%20your%20portfolio.%20I%20am%20impressed%20with%20your%20work%20in%20.NET%20and%20PHP%20and%20would%20like%20to%20discuss%20a%20potential%20job%20opportunity." class="social-btn" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-</a>        </div>
-    </div>
-</section>
-
-    <!-- Footer -->
-    <footer>
-        <p>Designed with <span>♥</span> by Muskan Mushtaq | Developer Portfolio</p>
-        <p style="margin-top: 8px; opacity: 0.6;">© 2026 All Rights Reserved</p>
-    </footer>
-<button id="portfolioBackToTop" title="Go to Top">
-    <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="arrowGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#00d2ff" /> <stop offset="50%" stop-color="#9b51e0" /> <stop offset="100%" stop-color="#ff007f" /> </linearGradient>
-        </defs>
-        <path d="M12 4L4 12H9V20H15V12H20L12 4Z" fill="url(#arrowGradient)" />
-    </svg>
-</button>
-
-<style>
-    #portfolioBackToTop {
-        display: none; /* Shuru mein hidden rahega */
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        z-index: 9999;
-        
-        /* Button Base: Dark Transparent Black taake aapki theme ke upar suit kare */
-        background: rgba(20, 20, 20, 0.85); 
-        border: 2px solid #9b51e0; /* Purple Neon Border */
-        
-        width: 55px;
-        height: 55px;
-        border-radius: 50%; /* Gol Button */
-        cursor: pointer;
-        
-        /* Flexbox taake arrow bilkul center mein rahe */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        /* Neon Glow Effect around the button */
-        box-shadow: 0 0 15px rgba(0, 210, 255, 0.4), 0 0 25px rgba(255, 0, 127, 0.3);
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    /* Jab normal screen par dikhega, arrow ALREADY multi-color chamak raha hoga */
-    #portfolioBackToTop svg {
-        display: block;
-    }
-
-    /* Hover karne par Animation aur Glow tez hoga */
-    #portfolioBackToTop:hover {
-        transform: scale(1.1) translateY(-5px);
-        border-color: #ff007f; /* Border pink ho jayegi */
-        box-shadow: 0 0 25px #00d2ff, 0 0 40px #ff007f; /* Full Neon Blast */
-    }
-</style>
-
-<script>
-    (function() {
-        const topBtn = document.getElementById("portfolioBackToTop");
-
-        // Jab user 400px neeche scroll kare toh button smoothly show ho
-        window.addEventListener("scroll", function() {
-            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
-                topBtn.style.style.display = "flex"; /* Flex use kiya taake centering kharab na ho */
-            } else {
-                topBtn.style.style.display = "none";
-            }
-        });
-
-        // Click karne par foran bina jhanjhat ke smoothly top par le jaye
-        topBtn.addEventListener("click", function() {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-    })();
-</script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Video Functions
-        function openVideo(videoFile, title) {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('demoVideo');
-            const videoTitle = document.getElementById('videoTitle');
-
-            videoTitle.textContent = title;
-            video.src = videoFile;
-            modal.classList.add('active');
-            video.play();
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeVideo() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('demoVideo');
-
-            video.pause();
-            video.currentTime = 0;
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        document.getElementById('videoModal').addEventListener('click', function(e) {
-            if (e.target === this) closeVideo();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeVideo();
-        });
-
-        // Typing Effect
-        const typingElement = document.getElementById('typing');
-        const texts = ['.NET Developer', 'PHP Developer', 'Full Stack Developer', 'Software Engineer'];
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function type() {
-            const currentText = texts[textIndex];
-            
-            if (isDeleting) {
-                typingElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typingElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === currentText.length) {
-                isDeleting = true;
-                setTimeout(type, 2000);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                textIndex = (textIndex + 1) % texts.length;
-                setTimeout(type, 500);
-            } else {
-                setTimeout(type, isDeleting ? 50 : 100);
-            }
-        }
-        type();
-
-        // Scroll Reveal
-        const reveals = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#07090e',
+                        darkCard: '#0c1017',
+                        darkBorder: '#1e293b',
+                        cyanGlow: '#00f2fe',
+                        blueGlow: '#4facfe',
+                        purpleGlow: '#8a2be2',
+                        accentPink: '#ec4899'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'spin-slow': 'spin 20s linear infinite',
+                        'spin-reverse-slow': 'spin-reverse 25s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'spin-reverse': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(-360deg)' }
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' }
+                        },
+                        'pulseGlow': {
+                            '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(0,242,254,0.4))' },
+                            '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 30px rgba(138,43,226,0.7))' }
+                        }
+                    }
                 }
-            });
-        }, { threshold: 0.1 });
-
-        reveals.forEach(el => revealObserver.observe(el));
-
-    function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-}
-
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('active');
-    document.getElementById('sidebarOverlay').classList.remove('active');
-}
-    
-    navLinks.classList.toggle('active');
-    
-    // Smooth icon change
-    if (navLinks.classList.contains('active')) {
-        toggleBtnIcon.classList.remove('fa-bars');
-        toggleBtnIcon.classList.add('fa-times');
-        // Button ko thora rotate effect dene ke liye (optional)
-        document.querySelector('.mobile-toggle').style.transform = 'rotate(90deg)';
-    } else {
-        toggleBtnIcon.classList.remove('fa-times');
-        toggleBtnIcon.classList.add('fa-bars');
-        document.querySelector('.mobile-toggle').style.transform = 'rotate(0deg)';
-    }
-
-
-
+            }
+        }
     </script>
 
-<script>
-    // --- 1. SAFELY FIX CONSOLE ERRORS ---
-    const navLinks = document.querySelectorAll('.nav-link') || [];
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
-    function safeSetDisplay(element, value) {
-        if (element) {
-            element.style.display = value;
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP for Smooth Interactive Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body {
+            background-color: #07090e;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(12, 16, 23, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(19, 25, 36, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 242, 254, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* Gradient Glow Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Background Grid Pattern */
+        .bg-grid-pattern {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f2fe;
+        }
+
+        .orbit-container {
+            perspective: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern relative selection:bg-cyan-500 selection:text-black">
+
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Ambient Glowing Gradient Orbs -->
+    <div class="fixed top-1/4 left-10 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-[120px] pointer-events-none animate-pulse-glow"></div>
+    <div class="fixed bottom-1/3 right-10 w-96 h-96 bg-purple-600/10 rounded-full filter blur-[140px] pointer-events-none animate-pulse-glow" style="animation-delay: 1.5s;"></div>
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="mainHeader">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#home" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[2px] transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-darkBg rounded-[10px] flex items-center justify-center">
+                        <span class="font-mono font-bold text-lg text-cyan-400">M</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-wide text-white group-hover:text-cyan-400 transition-colors">Muskan Mushtaq</span>
+                    <span class="text-[10px] text-gray-400 tracking-widest uppercase font-mono">Full Stack Dev</span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-1 glass-panel px-6 py-2 rounded-full border border-white/10 shadow-lg">
+                <a href="#home" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Home</a>
+                <a href="#about" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">About</a>
+                <a href="#skills" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Skills</a>
+                <a href="#experience" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Experience</a>
+                <a href="#achievements" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Achievements</a>
+                <a href="#projects" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Projects</a>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="#contact" class="relative group overflow-hidden rounded-full p-[1px] inline-block">
+                    <span class="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full"></span>
+                    <span class="relative px-6 py-2.5 rounded-full bg-darkBg flex items-center space-x-2 text-sm font-medium text-white group-hover:bg-transparent transition-all duration-300">
+                        <span>Let's Connect</span>
+                        <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+            </div>
+
+            <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg glass-panel">
+                <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div id="mobileDrawer" class="fixed inset-0 bg-darkBg/95 backdrop-blur-2xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col justify-between p-8">
+        <div class="flex justify-between items-center border-b border-white/10 pb-6">
+            <span class="font-bold text-xl text-white">Menu</span>
+            <button id="closeDrawerBtn" class="text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        
+        <div class="flex flex-col space-y-6 my-auto text-center text-lg font-medium">
+            <a href="#home" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Home</a>
+            <a href="#about" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">About</a>
+            <a href="#skills" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Skills</a>
+            <a href="#experience" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Experience</a>
+            <a href="#achievements" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Achievements</a>
+            <a href="#projects" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="#contact" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Contact</a>
+        </div>
+
+        <div class="pt-6 border-t border-white/10 text-center">
+            <a href="#contact" class="drawer-link w-full py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium inline-block">
+                Let's Connect
+            </a>
+            <p class="text-xs text-gray-500 mt-4">Muskan Mushtaq • Full Stack Web Developer</p>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-24">
+
+        <section id="home" class="min-h-[calc(100vh-6rem)] flex items-center justify-center px-6 py-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Column -->
+                <div class="lg:col-span-7 flex flex-col items-start space-y-6 text-left">
+                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-cyan-300 text-xs font-mono tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                        <span>Open to Full-Time & Remote Opportunities</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-gray-400 font-mono text-sm md:text-base">Hi, I'm <span class="text-white font-semibold">Muskan Mushtaq</span></p>
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-white">
+                            Full Stack <br />
+                            <span class="text-gradient">Web Developer</span>
+                        </h1>
+                    </div>
+
+                    <div class="h-10 text-lg sm:text-2xl font-mono text-cyan-400 flex items-center space-x-3">
+                        <span class="text-gray-500">&gt;</span>
+                        <span id="rotatingText" class="border-r-2 border-cyan-400 pr-2">.NET Developer</span>
+                    </div>
+
+                    <p class="text-gray-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                        Passionate about crafting dynamic, scalable, and responsive web applications. Expertly navigating both frontend and backend architectures across <strong class="text-gray-200">.NET, PHP, and the MERN Stack</strong>.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#projects" class="px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-semibold shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Explore My Work</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+
+                        <a href="Muskan_Mushtaq_Resume.pdf" download="Muskan_Mushtaq_Resume.pdf" class="px-8 py-4 rounded-full glass-panel border border-cyan-400/40 text-cyan-300 font-semibold hover:bg-cyan-500 hover:text-black transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Download CV</span>
+                            <i class="fa-solid fa-download text-sm"></i>
+                        </a>
+
+                        <a href="#contact" class="px-8 py-4 rounded-full glass-panel border border-white/10 text-white font-semibold hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Let's Connect</span>
+                            <i class="fa-regular fa-paper-plane text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right Column -->
+                <div class="lg:col-span-5 flex justify-center items-center relative orbit-container" id="heroVisualContainer">
+                    <div class="absolute w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-600/20 filter blur-3xl -z-10 animate-pulse-glow"></div>
+
+                    <div class="relative w-80 h-80 sm:w-96 sm:h-96 flex items-center justify-center transform-gpu transition-transform duration-200 ease-out" id="parallaxCard">
+                        <div class="absolute inset-0 rounded-full border border-dashed border-cyan-500/30 animate-spin-slow"></div>
+                        <div class="absolute inset-4 rounded-full border border-dashed border-purple-500/30 animate-spin-reverse-slow"></div>
+
+                        <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full p-1.5 bg-gradient-to-tr from-cyan-400 via-purple-500 to-blue-500 shadow-2xl shadow-cyan-500/20 group">
+                            <div class="w-full h-full rounded-full overflow-hidden bg-darkBg relative border-2 border-darkBg">
+                                <img src="assets/download (1).webp" alt="Muskan Mushtaq" class="w-full h-full object-cover rounded-full filter contrast-105 brightness-105 group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-darkBg/60 via-transparent to-transparent"></div>
+                            </div>
+
+                            <div class="absolute -bottom-2 right-2 glass-panel px-3 py-1 rounded-full border border-cyan-400/40 text-[11px] font-mono text-cyan-300 flex items-center space-x-1.5 shadow-lg">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Full Stack Dev</span>
+                            </div>
+                        </div>
+
+                        <!-- Orbiting Tech Icons -->
+                        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-10 rounded-xl glass-panel border border-orange-500/40 flex items-center justify-center text-orange-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 0s;">
+                            <i class="fa-brands fa-html5"></i>
+                        </div>
+                        <div class="absolute top-1/4 -right-2 w-10 h-10 rounded-xl glass-panel border border-blue-500/40 flex items-center justify-center text-blue-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 0.8s;">
+                            <i class="fa-brands fa-css3-alt"></i>
+                        </div>
+                        <div class="absolute bottom-1/4 -right-2 w-10 h-10 rounded-xl glass-panel border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 1.6s;">
+                            <i class="fa-brands fa-react"></i>
+                        </div>
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-10 rounded-xl glass-panel border border-green-500/40 flex items-center justify-center text-green-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 2.4s;">
+                            <i class="fa-brands fa-node-js"></i>
+                        </div>
+                        <div class="absolute bottom-1/4 -left-2 w-10 h-10 rounded-xl glass-panel border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 3.2s;">
+                            <i class="fa-brands fa-php"></i>
+                        </div>
+                        <div class="absolute top-1/4 -left-2 w-10 h-10 rounded-xl glass-panel border border-blue-400/40 flex items-center justify-center text-blue-300 text-sm font-mono font-bold shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 4.0s;">
+                            .NET
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="py-10 border-y border-white/5 bg-darkCard/30 relative">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="2">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Remote Internships</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="2">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Client Projects</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="6">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Featured Projects</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient">100%</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Web Application Focus</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 px-6 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-sm rounded-3xl p-1 bg-gradient-to-b from-cyan-500/40 via-purple-500/20 to-transparent glass-card group">
+                            <div class="relative rounded-[22px] overflow-hidden bg-darkBg p-6 flex flex-col items-center text-center space-y-4">
+                                <div class="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-cyan-500/30">
+                                    <img src="assets/download (3).webp" alt="Muskan Mushtaq Profile" class="w-full h-full object-cover">
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h3 class="text-xl font-bold text-white">Muskan Mushtaq</h3>
+                                    <p class="text-xs font-mono text-cyan-400">Full Stack Web Developer</p>
+                                </div>
+
+                                <div class="w-full py-2 px-3 rounded-xl glass-panel border border-white/5 flex items-center justify-between text-xs font-mono text-gray-300">
+                                    <span class="flex items-center space-x-2">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>Status</span>
+                                    </span>
+                                    <span class="text-emerald-400">Available For Hire</span>
+                                </div>
+
+                                <div class="w-full pt-2 border-t border-white/10 flex justify-around text-xs text-gray-400 font-mono">
+                                    <span>.NET</span> • <span>PHP</span> • <span>MERN</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// A LITTLE ABOUT ME</span>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white">Building Modern, Responsive & High-Performance Web Applications</h2>
+                        </div>
+
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            I’m <strong class="text-white">Muskan Mushtaq</strong>, a Full Stack Web Developer driven by creating seamless digital experiences. With expertise spanning <span class="text-cyan-300 font-medium">.NET</span>, <span class="text-purple-300 font-medium">PHP</span>, and the <span class="text-blue-300 font-medium">MERN Stack</span>, I bridge the gap between front-end visuals and robust back-end systems.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="glass-panel p-4 rounded-2xl border-l-4 border-l-cyan-400 space-y-1">
+                                <div class="text-sm font-semibold text-white">Academic Foundation</div>
+                                <div class="text-xs text-gray-400">2nd Year Commerce + Full Stack Web Development at Aptech</div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-2xl border-l-4 border-l-purple-400 space-y-1">
+                                <div class="text-sm font-semibold text-white">Practical Experience</div>
+                                <div class="text-xs text-gray-400">2 Remote Internships + 2 Production Client Projects</div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            From engineering full-scale e-commerce stores to designing web application architectures, I focus on clean code, database efficiency, and pixel-perfect user interfaces.
+                        </p>
+
+                        <div class="pt-2 flex items-center space-x-3 text-sm font-mono text-cyan-400">
+                            <i class="fa-solid fa-graduation-cap text-base"></i>
+                            <span>Continuous Learner • Aptech Trained Professional</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// TECHNICAL ECOSYSTEM</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Interactive Skills Constellation</h2>
+                    <p class="text-gray-400 text-sm">Hover over any node to explore my core technical tools and framework expertise.</p>
+                </div>
+
+                <div class="relative min-h-[420px] rounded-3xl glass-panel p-8 flex flex-col items-center justify-center border border-white/10 overflow-hidden">
+                    <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-cyan-500 to-purple-600 p-1 shadow-2xl shadow-cyan-500/30 z-20 mb-10 md:mb-0 hover:scale-110 transition-transform cursor-pointer flex items-center justify-center text-center">
+                        <div class="w-full h-full bg-darkBg rounded-full flex flex-col items-center justify-center p-2">
+                            <i class="fa-solid fa-code text-2xl text-cyan-400 mb-1"></i>
+                            <span class="font-extrabold text-xs text-white tracking-widest">FULL STACK</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-8 z-10">
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-html5 text-3xl text-orange-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">HTML5</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Semantic Layouts</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-css3-alt text-3xl text-blue-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">CSS3 / Tailwind</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Responsive Design</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-js text-3xl text-yellow-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">JavaScript</span>
+                            <span class="text-[11px] text-gray-400 font-mono">ES6+ Logic</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-php text-3xl text-purple-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">PHP</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Backend Engineering</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-solid fa-terminal text-3xl text-blue-300 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">C# / .NET</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Enterprise Apps</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-react text-3xl text-cyan-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">React.js</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Frontend UI</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-node-js text-3xl text-green-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Node / Express</span>
+                            <span class="text-[11px] text-gray-400 font-mono">REST APIs</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-solid fa-database text-3xl text-emerald-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">MongoDB & SQL</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Data Modeling</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-bootstrap text-3xl text-purple-500 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Bootstrap</span>
+                            <span class="text-[11px] text-gray-400 font-mono">UI Components</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-git-alt text-3xl text-red-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Git & GitHub</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Version Control</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 px-6 relative">
+            <div class="max-w-5xl mx-auto space-y-12">
+                <div class="text-center space-y-3">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// CAREER JOURNEY</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Professional Experience</h2>
+                </div>
+
+                <div class="relative border-l-2 border-cyan-500/30 ml-4 md:ml-32 space-y-10">
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-cyan-400 flex items-center justify-center text-cyan-400 text-xs shadow-lg group-hover:bg-cyan-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">NexSoft Solutions</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 w-fit">Remote Internship</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Full Stack Web Development Intern</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Contributed to real-world web applications, assisting in developing backend architectures, writing scalable APIs, and crafting responsive client interfaces.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">.NET</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">C#</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">SQL Server</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-purple-400 flex items-center justify-center text-purple-400 text-xs shadow-lg group-hover:bg-purple-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">FentixTech</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-500/10 text-purple-300 border border-purple-500/30 w-fit">Remote Internship</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Web Developer Intern</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Developed dynamic web pages, integrated databases, optimized backend routines, and collaborated in an agile development workflow.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">PHP</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">MySQL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-xs shadow-lg group-hover:bg-emerald-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">Client Projects & E-Commerce Platforms</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 w-fit">Production Work</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Freelance / Contract Full Stack Developer</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Successfully delivered custom web solutions and e-commerce platforms tailored to client specifications, incorporating cart workflows, user authentication, and admin dashboards.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">MERN Stack</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">REST APIs</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">Tailwind CSS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="achievements" class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// RECOGNITION</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Honors & Achievements</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-cyan-500/20 hover:border-cyan-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Student of the Month</h3>
+                            <p class="text-xs font-mono text-cyan-400">Aptech Academic Excellence</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Recognized for outstanding technical performance, problem-solving skills, and dedication during web development training.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-purple-500/20 hover:border-purple-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Project of the Month</h3>
+                            <p class="text-xs font-mono text-purple-400">Best Web Application</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Awarded top project honors for designing and building an outstanding full stack web application prototype.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-blue-500/20 hover:border-blue-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">IT Vision Competition</h3>
+                            <p class="text-xs font-mono text-blue-400">Participant</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Showcased creative tech solutions and software engineering methodologies in competitive IT challenges.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-emerald-500/20 hover:border-emerald-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Techvise Competition</h3>
+                            <p class="text-xs font-mono text-emerald-400">Participant</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Engaged with fellow developers, building innovative concepts under structured competition deadlines.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 px-6 relative">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// PORTFOLIO WORK</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Featured Projects</h2>
+                    <p class="text-gray-400 text-sm">Explore interactive project demos and technical walkthroughs.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1: AI Interviewer -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/AI_InterviwerPic.png" alt="AI Interviewer Platform" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('AI Interviewer System', 'Competition entry built for IT Vision. An automated AI-assisted interviewing system evaluating candidate responses and skills.', ['.NET Core', 'C#', 'AI Integration', 'SQL Server'], 'assets/AI_InterviwerVedio.mp4')" class="px-5 py-2.5 rounded-full bg-cyan-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">.NET Core & AI</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Competition</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">AI Interviewer Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">IT Vision competition project providing automated interview assessments and response evaluations.</p>
+                            </div>
+                            <button onclick="openDemoModal('AI Interviewer System', 'Competition entry built for IT Vision. An automated AI-assisted interviewing system evaluating candidate responses and skills.', ['.NET Core', 'C#', 'AI Integration', 'SQL Server'], 'assets/AI_InterviwerVedio.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-cyan-300 hover:bg-cyan-500 hover:text-black transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Bags E-Commerce Platform -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/bag3 - Copy.png" alt="Client Bags E-Commerce Platform" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Client Bags E-Commerce Platform', 'Custom e-commerce solution built for selling bags, featuring product catalog, cart logic, and administrative dashboard.', ['.NET Core', 'C#', 'SQL Server', 'Tailwind'], 'assets/bag2.mp4')" class="px-5 py-2.5 rounded-full bg-purple-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">.NET Core</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Client Work</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">Bags E-Commerce Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Client production project for selling bags with custom web layout and relational database backend.</p>
+                            </div>
+                            <button onclick="openDemoModal('Client Bags E-Commerce Platform', 'Custom e-commerce solution built for selling bags, featuring product catalog, cart logic, and administrative dashboard.', ['.NET Core', 'C#', 'SQL Server', 'Tailwind'], 'assets/bag2.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-purple-300 hover:bg-purple-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Bus Reservation System -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/bus1.png" alt="Bus Reservation System" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Bus Reservation System', 'Semester end project engineered for managing bus routes, passenger ticket bookings, seat allocations, and admin panels.', ['.NET Core', 'C#', 'SQL Server', 'Bootstrap'], 'assets/bus.mp4')" class="px-5 py-2.5 rounded-full bg-blue-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">.NET Core</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Semester Project</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">Bus Reservation System</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Comprehensive management system handling ticket booking, routes, and admin schedules.</p>
+                            </div>
+                            <button onclick="openDemoModal('Bus Reservation System', 'Semester end project engineered for managing bus routes, passenger ticket bookings, seat allocations, and admin panels.', ['.NET Core', 'C#', 'SQL Server', 'Bootstrap'], 'assets/bus.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-blue-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+             <!-- Project 4: Burger Website -->
+<div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+
+    <div class="relative overflow-hidden aspect-video">
+        <img 
+            src="assets/burgur1.png" 
+            alt="Animated Burger Experience" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        >
+
+        <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <button 
+                onclick="openDemoModal(
+                    'Animated Burger Experience',
+                    'An immersive animated burger website featuring scroll-driven 3D burger interactions, cinematic transitions, and an interactive food presentation experience.',
+                    ['HTML/CSS', 'JavaScript', 'Tailwind', 'Animation'],
+                    'assets/burgurB.mp4'
+                )"
+                class="px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform"
+            >
+                <i class="fa-solid fa-circle-play text-base"></i>
+                <span>Watch Demo</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+
+        <div class="space-y-2">
+
+            <div class="flex flex-wrap gap-2">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                    Interactive
+                </span>
+
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">
+                    Animation
+                </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                Animated Burger Experience
+            </h3>
+
+            <p class="text-xs text-gray-400 leading-relaxed">
+                A creative food website featuring scroll-driven burger animations, cinematic transitions, interactive storytelling, and an immersive modern user experience.
+            </p>
+
+        </div>
+
+        <button 
+            onclick="openDemoModal(
+                'Animated Burger Experience',
+                'An immersive animated burger website featuring scroll-driven 3D burger interactions, cinematic transitions, and an interactive food presentation experience.',
+                ['HTML/CSS', 'JavaScript', 'Tailwind', 'Animation'],
+                'assets/burgurB.mp4'
+            )"
+            class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-emerald-300 hover:bg-emerald-500 hover:text-black transition-all flex items-center justify-center space-x-2"
+        >
+            <i class="fa-solid fa-play text-xs"></i>
+            <span>Watch Demo</span>
+        </button>
+
+    </div>
+</div>
+
+                    <!-- Project 5: Leather Secret Jackets -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/us.png" alt="Leather Secret Storefront" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Leather Secret Jackets', 'Bespoke US e-commerce platform crafted for premium custom leather outerwear, real-time catalog management, and seamless client checkout.', ['E-Commerce', 'Full Stack', 'Tailwind', 'Stripe API'], 'assets/us2.mp4')" class="px-5 py-2.5 rounded-full bg-amber-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">US Client Production</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Leather & Apparel</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Leather Secret Jackets</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Stylish e-commerce experience tailored for custom luxury leather jackets and premium client ordering.</p>
+                            </div>
+                            <button onclick="openDemoModal('Leather Secret Jackets', 'Bespoke US e-commerce platform crafted for premium custom leather outerwear, real-time catalog management, and seamless client checkout.', ['E-Commerce', 'Full Stack', 'Tailwind', 'Stripe API'], 'assets/us2.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-amber-300 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 6: Shop Nova Clothing -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/cloths.png" alt="Shop Nova Clothing App" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Shop Nova - E-Commerce Clothing', 'An IT Vision competition project built on PHP & MySQL. Custom dynamic clothing e-commerce web platform with interactive catalog, product filtering, and shopping cart.', ['PHP', 'MySQL', 'JavaScript', 'Tailwind'], 'assets/cloths.mp4')" class="px-5 py-2.5 rounded-full bg-yellow-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">PHP & MySQL</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Competition</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-yellow-400 transition-colors">Shop Nova Clothing Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Dynamic online clothing store featuring catalog management, user cart logic, and secure checkout handling.</p>
+                            </div>
+                            <button onclick="openDemoModal('Shop Nova - E-Commerce Clothing', 'An IT Vision competition project built on PHP & MySQL. Custom dynamic clothing e-commerce web platform with interactive catalog, product filtering, and shopping cart.', ['PHP', 'MySQL', 'JavaScript', 'Tailwind'], 'assets/cloths.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// CORE SERVICES</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">What I Build</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-cyan-500/20 hover:border-cyan-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Full Stack Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            End-to-end web engineering using modern frontend stacks alongside robust backend structures (.NET, PHP, MERN).
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-purple-500/20 hover:border-purple-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500/20 to-pink-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">E-Commerce Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Building secure, responsive online store platforms equipped with cart management, catalog organization, and user checkout tools.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-emerald-500/20 hover:border-emerald-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-window-maximize"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Web Application Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Designing and deploying dynamic single-page applications, administrative dashboards, and database-driven solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 px-6 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center space-y-10 relative z-10">
+                <div class="space-y-4 max-w-3xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// LET'S CONNECT</span>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight">
+                        Let's build something <span class="text-gradient">amazing.</span>
+                    </h2>
+                    <p class="text-gray-300 text-base md:text-lg leading-relaxed">
+                        I am currently looking for full-time and remote opportunities where I can contribute, learn, and build meaningful digital experiences.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+                    <a href="mailto:muskan.mushtaq.dev@example.com" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-cyan-500/30 hover:border-cyan-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-solid fa-envelope text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>Email Me</span>
+                    </a>
+
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-blue-500/30 hover:border-blue-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-brands fa-linkedin text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>LinkedIn</span>
+                    </a>
+
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-purple-500/30 hover:border-purple-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-brands fa-github text-purple-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-8 px-6 border-t border-white/10 relative z-10 text-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-500">
+            <div>© Muskan Mushtaq • Full Stack Web Developer</div>
+            <div class="flex space-x-4">
+                <span>.NET</span>
+                <span>PHP</span>
+                <span>MERN</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Circular Button -->
+    <button id="backToTopBtn" class="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full glass-panel border border-cyan-400/40 text-cyan-400 flex items-center justify-center shadow-xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 hover:bg-cyan-400 hover:text-black">
+        <i class="fa-solid fa-arrow-up text-lg"></i>
+    </button>
+
+    <!-- SINGLE WORKING REAL VIDEO DEMO MODAL -->
+    <div id="demoModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 sm:p-8">
+        <div class="relative w-full max-w-4xl glass-panel border border-white/20 rounded-3xl overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-white/10 flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-white" id="modalTitle">Project Demo</h3>
+                    <p class="text-xs font-mono text-cyan-400" id="modalSub">Walkthrough & Showcase</p>
+                </div>
+                <button onclick="closeDemoModal()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Video Player -->
+            <div class="p-6 space-y-6 overflow-y-auto">
+                <div class="relative aspect-video rounded-2xl overflow-hidden bg-darkBg border border-white/10 flex items-center justify-center">
+                    <video id="modalVideoPlayer" controls class="w-full h-full object-cover">
+                        <source src="" id="modalVideoSource" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold text-white">Project Highlights</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed" id="modalDesc">Detailed project explanation and technical architectural breakdown.</p>
+                    <div class="pt-2 flex flex-wrap gap-2" id="modalTechBadges">
+                        <!-- Badges populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Execution -->
+    <script>
+    /* Ambient Particle Canvas Simulation */
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let particles = [];
+
+    function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * (canvas ? canvas.width : 1000);
+            this.y = Math.random() * (canvas ? canvas.height : 1000);
+            this.size = Math.random() * 1.8 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (canvas) {
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+        }
+        draw() {
+            if (!ctx) return;
+            ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
         }
     }
 
-    // --- 2. OPTIMIZED AMBIENT STARLIGHT ENGINE ---
-    const canvas = document.getElementById('starCanvas');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-
-        let width, height;
-        let stars = [];
-        let shootingStar = null;
-
-        // Balanced Configuration (Focus stays on Portfolio Content)
-        const STAR_COUNT = 90;   // Reduced count for clean look
-        const STAR_SPEED = 0.12;  // Slow, smooth & elegant floating motion
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+    function initParticles() {
+        if (!canvas) return;
+        particles = [];
+        const count = Math.min(Math.floor(window.innerWidth / 20), 60);
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
         }
-        window.addEventListener('resize', resize);
-        resize();
+    }
+    initParticles();
 
-        class Star {
-            constructor() {
-                this.reset();
-            }
+    function animateParticles() {
+        if (!ctx || !canvas) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
 
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                // Mostly tiny dots, few medium stars
-                this.size = Math.random() < 0.85 ? Math.random() * 1.2 : Math.random() * 1.8 + 0.5;
-                
-                // Slow ambient drift
-                this.speedX = (Math.random() - 0.5) * STAR_SPEED;
-                this.speedY = (Math.random() - 0.5) * STAR_SPEED;
-                
-                this.opacity = Math.random() * 0.5 + 0.2; // Softer max opacity
-                this.twinkleFactor = (Math.random() - 0.5) * 0.012; // Gentle twinkle
-            }
+    /* Dynamic Rotating Text in Hero */
+    const textArray = [".NET Developer", "PHP Developer", "MERN Stack Developer", "Web Application Developer"];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const rotatingTextEl = document.getElementById('rotatingText');
 
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // Screen Wrap
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-
-                // Twinkle Logic
-                this.opacity += this.twinkleFactor;
-                if (this.opacity > 0.75 || this.opacity < 0.15) {
-                    this.twinkleFactor = -this.twinkleFactor;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.fill();
-                ctx.closePath();
-            }
+    function typeEffect() {
+        if (!rotatingTextEl) return;
+        const currentText = textArray[textIndex];
+        if (isDeleting) {
+            rotatingTextEl.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            rotatingTextEl.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
         }
 
-        // Subtler Shooting Star Effect
-        class ShootingStar {
-            constructor() {
-                this.reset();
-            }
+        let typeSpeed = isDeleting ? 40 : 80;
 
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * (height / 3);
-                this.length = Math.random() * 60 + 40;
-                this.speed = Math.random() * 6 + 4;
-                this.size = Math.random() * 0.8 + 0.2;
-                this.active = true;
-            }
-
-            update() {
-                this.x -= this.speed;
-                this.y += this.speed;
-
-                if (this.x < -this.length || this.y > height + this.length) {
-                    this.active = false;
-                }
-            }
-
-            draw() {
-                if (!this.active) return;
-                
-                ctx.save();
-                ctx.beginPath();
-                const gradient = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y - this.length);
-                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
-                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = this.size;
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x + this.length, this.y - this.length);
-                ctx.stroke();
-                ctx.restore();
-            }
+        if (!isDeleting && charIndex === currentText.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % textArray.length;
+            typeSpeed = 500;
         }
 
-        function initStars() {
-            stars = [];
-            for (let i = 0; i < STAR_COUNT; i++) {
-                stars.push(new Star());
+        setTimeout(typeEffect, typeSpeed);
+    }
+    typeEffect();
+
+    /* Mouse Parallax Effect on Hero Card */
+    const heroCard = document.getElementById('parallaxCard');
+    const heroContainer = document.getElementById('heroVisualContainer');
+
+    if (heroContainer && heroCard) {
+        heroContainer.addEventListener('mousemove', (e) => {
+            const rect = heroContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            heroCard.style.transform = `rotateY(${x * 0.05}deg) rotateX(${-y * 0.05}deg)`;
+        });
+
+        heroContainer.addEventListener('mouseleave', () => {
+            heroCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    }
+
+    /* Mobile Drawer Logic */
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    function openDrawer() {
+        if (mobileDrawer) mobileDrawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        if (mobileDrawer) mobileDrawer.classList.add('translate-x-full');
+        document.body.style.overflow = 'auto';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+
+    /* Back to Top Button Logic */
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (backToTopBtn) {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
             }
         }
+    });
 
-        function animateStars() {
-            ctx.fillStyle = '#020617';
-            ctx.fillRect(0, 0, width, height);
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
-            stars.forEach(star => {
-                star.update();
-                star.draw();
+    /* REAL VIDEO DEMO MODAL FUNCTIONALITY */
+    const demoModal = document.getElementById('demoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalTechBadges = document.getElementById('modalTechBadges');
+    const modalVideoPlayer = document.getElementById('modalVideoPlayer');
+    const modalVideoSource = document.getElementById('modalVideoSource');
+
+    function openDemoModal(title, description, techList, videoUrl) {
+        if (modalTitle) modalTitle.textContent = title;
+        if (modalDesc) modalDesc.textContent = description;
+        
+        if (modalTechBadges) {
+            modalTechBadges.innerHTML = '';
+            techList.forEach(tech => {
+                const badge = document.createElement('span');
+                badge.className = 'px-2.5 py-1 rounded-md text-[11px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30';
+                badge.textContent = tech;
+                modalTechBadges.appendChild(badge);
             });
-
-            // Occasional gentle shooting star
-            if (!shootingStar && Math.random() < 0.004) {
-                shootingStar = new ShootingStar();
-            }
-
-            if (shootingStar) {
-                shootingStar.update();
-                shootingStar.draw();
-                if (!shootingStar.active) {
-                    shootingStar = null;
-                }
-            }
-
-            requestAnimationFrame(animateStars);
         }
 
-        initStars();
-        animateStars();
+        // Load & Play real video
+        if (modalVideoPlayer && modalVideoSource && videoUrl) {
+            modalVideoSource.src = videoUrl;
+            modalVideoPlayer.load();
+            modalVideoPlayer.play().catch(e => console.log("Video autoplay handled:", e));
+        }
+
+        if (demoModal) {
+            demoModal.classList.remove('opacity-0', 'pointer-events-none');
+            demoModal.classList.add('opacity-100', 'pointer-events-auto');
+        }
+        document.body.style.overflow = 'hidden';
     }
-</script>
+
+    function closeDemoModal() {
+        if (demoModal) {
+            demoModal.classList.remove('opacity-100', 'pointer-events-auto');
+            demoModal.classList.add('opacity-0', 'pointer-events-none');
+        }
+        document.body.style.overflow = 'auto';
+
+        // Pause video on modal close
+        if (modalVideoPlayer && modalVideoSource) {
+            modalVideoPlayer.pause();
+            modalVideoSource.src = "";
+        }
+    }
+
+    /* Animated Statistics Counter */
+    const counters = document.querySelectorAll('.counter');
+    let counterAnimated = false;
+
+    window.addEventListener('scroll', () => {
+        if (counters.length === 0) return;
+
+        const statsSection = counters[0];
+        const rect = statsSection.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && !counterAnimated) {
+            counterAnimated = true;
+
+            counters.forEach(counter => {
+                const attrValue = counter.getAttribute('data-target');
+                if (!attrValue) return;
+
+                const target = +attrValue;
+                let count = 0;
+                const speed = target / 20;
+
+                const updateCount = () => {
+                    count += speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count) + '+';
+                        setTimeout(updateCount, 50);
+                    } else {
+                        counter.innerText = target + '+';
+                    }
+                };
+
+                updateCount();
+            });
+        }
+    });
+    </script>
 </body>
 </html>
