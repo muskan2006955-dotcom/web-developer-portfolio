@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muskan Mushtaq | Full Stack Web Developer</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#07090e',
+                        darkCard: '#0c1017',
+                        darkBorder: '#1e293b',
+                        cyanGlow: '#00f2fe',
+                        blueGlow: '#4facfe',
+                        purpleGlow: '#8a2be2',
+                        accentPink: '#ec4899'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'spin-slow': 'spin 20s linear infinite',
+                        'spin-reverse-slow': 'spin-reverse 25s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'spin-reverse': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(-360deg)' }
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' }
+                        },
+                        'pulseGlow': {
+                            '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(0,242,254,0.4))' },
+                            '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 30px rgba(138,43,226,0.7))' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP for Smooth Interactive Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body {
+            background-color: #07090e;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(12, 16, 23, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(19, 25, 36, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 242, 254, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* Gradient Glow Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Background Grid Pattern */
+        .bg-grid-pattern {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f2fe;
+        }
+
+        .orbit-container {
+            perspective: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern relative selection:bg-cyan-500 selection:text-black">
+
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Ambient Glowing Gradient Orbs -->
+    <div class="fixed top-1/4 left-10 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-[120px] pointer-events-none animate-pulse-glow"></div>
+    <div class="fixed bottom-1/3 right-10 w-96 h-96 bg-purple-600/10 rounded-full filter blur-[140px] pointer-events-none animate-pulse-glow" style="animation-delay: 1.5s;"></div>
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="mainHeader">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#home" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[2px] transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-darkBg rounded-[10px] flex items-center justify-center">
+                        <span class="font-mono font-bold text-lg text-cyan-400">M</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-wide text-white group-hover:text-cyan-400 transition-colors">Muskan Mushtaq</span>
+                    <span class="text-[10px] text-gray-400 tracking-widest uppercase font-mono">Full Stack Dev</span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-1 glass-panel px-6 py-2 rounded-full border border-white/10 shadow-lg">
+                <a href="#home" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Home</a>
+                <a href="#about" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">About</a>
+                <a href="#skills" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Skills</a>
+                <a href="#experience" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Experience</a>
+                <a href="#achievements" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Achievements</a>
+                <a href="#projects" class="px-4 py-1.5 text-sm text-gray-300 hover:text-cyan-400 transition-colors rounded-full hover:bg-white/5">Projects</a>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="#contact" class="relative group overflow-hidden rounded-full p-[1px] inline-block">
+                    <span class="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full"></span>
+                    <span class="relative px-6 py-2.5 rounded-full bg-darkBg flex items-center space-x-2 text-sm font-medium text-white group-hover:bg-transparent transition-all duration-300">
+                        <span>Let's Connect</span>
+                        <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+            </div>
+
+            <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg glass-panel">
+                <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div id="mobileDrawer" class="fixed inset-0 bg-darkBg/95 backdrop-blur-2xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col justify-between p-8">
+        <div class="flex justify-between items-center border-b border-white/10 pb-6">
+            <span class="font-bold text-xl text-white">Menu</span>
+            <button id="closeDrawerBtn" class="text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        
+        <div class="flex flex-col space-y-6 my-auto text-center text-lg font-medium">
+            <a href="#home" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Home</a>
+            <a href="#about" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">About</a>
+            <a href="#skills" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Skills</a>
+            <a href="#experience" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Experience</a>
+            <a href="#achievements" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Achievements</a>
+            <a href="#projects" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="#contact" class="drawer-link text-gray-300 hover:text-cyan-400 transition-colors">Contact</a>
+        </div>
+
+        <div class="pt-6 border-t border-white/10 text-center">
+            <a href="#contact" class="drawer-link w-full py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium inline-block">
+                Let's Connect
+            </a>
+            <p class="text-xs text-gray-500 mt-4">Muskan Mushtaq • Full Stack Web Developer</p>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-24">
+
+        <section id="home" class="min-h-[calc(100vh-6rem)] flex items-center justify-center px-6 py-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Column -->
+                <div class="lg:col-span-7 flex flex-col items-start space-y-6 text-left">
+                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-cyan-300 text-xs font-mono tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                        <span>Open to Full-Time & Remote Opportunities</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-gray-400 font-mono text-sm md:text-base">Hi, I'm <span class="text-white font-semibold">Muskan Mushtaq</span></p>
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-white">
+                            Full Stack <br />
+                            <span class="text-gradient">Web Developer</span>
+                        </h1>
+                    </div>
+
+                    <div class="h-10 text-lg sm:text-2xl font-mono text-cyan-400 flex items-center space-x-3">
+                        <span class="text-gray-500">&gt;</span>
+                        <span id="rotatingText" class="border-r-2 border-cyan-400 pr-2">.NET Developer</span>
+                    </div>
+
+                    <p class="text-gray-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                        Passionate about crafting dynamic, scalable, and responsive web applications. Expertly navigating both frontend and backend architectures across <strong class="text-gray-200">.NET, PHP, and the MERN Stack</strong>.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#projects" class="px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-semibold shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Explore My Work</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+
+                        <a href="Muskan_Mushtaq_Resume.pdf" download="Muskan_Mushtaq_Resume.pdf" class="px-8 py-4 rounded-full glass-panel border border-cyan-400/40 text-cyan-300 font-semibold hover:bg-cyan-500 hover:text-black transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Download CV</span>
+                            <i class="fa-solid fa-download text-sm"></i>
+                        </a>
+
+                        <a href="#contact" class="px-8 py-4 rounded-full glass-panel border border-white/10 text-white font-semibold hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 hover:scale-105 flex items-center space-x-3">
+                            <span>Let's Connect</span>
+                            <i class="fa-regular fa-paper-plane text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right Column -->
+                <div class="lg:col-span-5 flex justify-center items-center relative orbit-container" id="heroVisualContainer">
+                    <div class="absolute w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-600/20 filter blur-3xl -z-10 animate-pulse-glow"></div>
+
+                    <div class="relative w-80 h-80 sm:w-96 sm:h-96 flex items-center justify-center transform-gpu transition-transform duration-200 ease-out" id="parallaxCard">
+                        <div class="absolute inset-0 rounded-full border border-dashed border-cyan-500/30 animate-spin-slow"></div>
+                        <div class="absolute inset-4 rounded-full border border-dashed border-purple-500/30 animate-spin-reverse-slow"></div>
+
+                        <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full p-1.5 bg-gradient-to-tr from-cyan-400 via-purple-500 to-blue-500 shadow-2xl shadow-cyan-500/20 group">
+                            <div class="w-full h-full rounded-full overflow-hidden bg-darkBg relative border-2 border-darkBg">
+                                <img src="assets/download (1).webp" alt="Muskan Mushtaq" class="w-full h-full object-cover rounded-full filter contrast-105 brightness-105 group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-darkBg/60 via-transparent to-transparent"></div>
+                            </div>
+
+                            <div class="absolute -bottom-2 right-2 glass-panel px-3 py-1 rounded-full border border-cyan-400/40 text-[11px] font-mono text-cyan-300 flex items-center space-x-1.5 shadow-lg">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Full Stack Dev</span>
+                            </div>
+                        </div>
+
+                        <!-- Orbiting Tech Icons -->
+                        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-10 rounded-xl glass-panel border border-orange-500/40 flex items-center justify-center text-orange-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 0s;">
+                            <i class="fa-brands fa-html5"></i>
+                        </div>
+                        <div class="absolute top-1/4 -right-2 w-10 h-10 rounded-xl glass-panel border border-blue-500/40 flex items-center justify-center text-blue-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 0.8s;">
+                            <i class="fa-brands fa-css3-alt"></i>
+                        </div>
+                        <div class="absolute bottom-1/4 -right-2 w-10 h-10 rounded-xl glass-panel border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 1.6s;">
+                            <i class="fa-brands fa-react"></i>
+                        </div>
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-10 rounded-xl glass-panel border border-green-500/40 flex items-center justify-center text-green-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 2.4s;">
+                            <i class="fa-brands fa-node-js"></i>
+                        </div>
+                        <div class="absolute bottom-1/4 -left-2 w-10 h-10 rounded-xl glass-panel border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 3.2s;">
+                            <i class="fa-brands fa-php"></i>
+                        </div>
+                        <div class="absolute top-1/4 -left-2 w-10 h-10 rounded-xl glass-panel border border-blue-400/40 flex items-center justify-center text-blue-300 text-sm font-mono font-bold shadow-lg hover:scale-125 transition-transform animate-float" style="animation-delay: 4.0s;">
+                            .NET
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="py-10 border-y border-white/5 bg-darkCard/30 relative">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="2">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Remote Internships</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="2">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Client Projects</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1 relative group">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient counter" data-target="6">0</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Featured Projects</span>
+                    <div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-3xl md:text-4xl font-extrabold text-gradient">100%</span>
+                    <span class="text-xs md:text-sm text-gray-400 font-mono">Web Application Focus</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 px-6 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-sm rounded-3xl p-1 bg-gradient-to-b from-cyan-500/40 via-purple-500/20 to-transparent glass-card group">
+                            <div class="relative rounded-[22px] overflow-hidden bg-darkBg p-6 flex flex-col items-center text-center space-y-4">
+                                <div class="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-cyan-500/30">
+                                    <img src="assets/download (3).webp" alt="Muskan Mushtaq Profile" class="w-full h-full object-cover">
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h3 class="text-xl font-bold text-white">Muskan Mushtaq</h3>
+                                    <p class="text-xs font-mono text-cyan-400">Full Stack Web Developer</p>
+                                </div>
+
+                                <div class="w-full py-2 px-3 rounded-xl glass-panel border border-white/5 flex items-center justify-between text-xs font-mono text-gray-300">
+                                    <span class="flex items-center space-x-2">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>Status</span>
+                                    </span>
+                                    <span class="text-emerald-400">Available For Hire</span>
+                                </div>
+
+                                <div class="w-full pt-2 border-t border-white/10 flex justify-around text-xs text-gray-400 font-mono">
+                                    <span>.NET</span> • <span>PHP</span> • <span>MERN</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// A LITTLE ABOUT ME</span>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white">Building Modern, Responsive & High-Performance Web Applications</h2>
+                        </div>
+
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            I’m <strong class="text-white">Muskan Mushtaq</strong>, a Full Stack Web Developer driven by creating seamless digital experiences. With expertise spanning <span class="text-cyan-300 font-medium">.NET</span>, <span class="text-purple-300 font-medium">PHP</span>, and the <span class="text-blue-300 font-medium">MERN Stack</span>, I bridge the gap between front-end visuals and robust back-end systems.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="glass-panel p-4 rounded-2xl border-l-4 border-l-cyan-400 space-y-1">
+                                <div class="text-sm font-semibold text-white">Academic Foundation</div>
+                                <div class="text-xs text-gray-400">2nd Year Commerce + Full Stack Web Development at Aptech</div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-2xl border-l-4 border-l-purple-400 space-y-1">
+                                <div class="text-sm font-semibold text-white">Practical Experience</div>
+                                <div class="text-xs text-gray-400">2 Remote Internships + 2 Production Client Projects</div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            From engineering full-scale e-commerce stores to designing web application architectures, I focus on clean code, database efficiency, and pixel-perfect user interfaces.
+                        </p>
+
+                        <div class="pt-2 flex items-center space-x-3 text-sm font-mono text-cyan-400">
+                            <i class="fa-solid fa-graduation-cap text-base"></i>
+                            <span>Continuous Learner • Aptech Trained Professional</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// TECHNICAL ECOSYSTEM</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Interactive Skills Constellation</h2>
+                    <p class="text-gray-400 text-sm">Hover over any node to explore my core technical tools and framework expertise.</p>
+                </div>
+
+                <div class="relative min-h-[420px] rounded-3xl glass-panel p-8 flex flex-col items-center justify-center border border-white/10 overflow-hidden">
+                    <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-cyan-500 to-purple-600 p-1 shadow-2xl shadow-cyan-500/30 z-20 mb-10 md:mb-0 hover:scale-110 transition-transform cursor-pointer flex items-center justify-center text-center">
+                        <div class="w-full h-full bg-darkBg rounded-full flex flex-col items-center justify-center p-2">
+                            <i class="fa-solid fa-code text-2xl text-cyan-400 mb-1"></i>
+                            <span class="font-extrabold text-xs text-white tracking-widest">FULL STACK</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-8 z-10">
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-html5 text-3xl text-orange-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">HTML5</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Semantic Layouts</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-css3-alt text-3xl text-blue-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">CSS3 / Tailwind</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Responsive Design</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-js text-3xl text-yellow-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">JavaScript</span>
+                            <span class="text-[11px] text-gray-400 font-mono">ES6+ Logic</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-php text-3xl text-purple-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">PHP</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Backend Engineering</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-solid fa-terminal text-3xl text-blue-300 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">C# / .NET</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Enterprise Apps</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-react text-3xl text-cyan-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">React.js</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Frontend UI</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-node-js text-3xl text-green-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Node / Express</span>
+                            <span class="text-[11px] text-gray-400 font-mono">REST APIs</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-solid fa-database text-3xl text-emerald-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">MongoDB & SQL</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Data Modeling</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-bootstrap text-3xl text-purple-500 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Bootstrap</span>
+                            <span class="text-[11px] text-gray-400 font-mono">UI Components</span>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center text-center space-y-2 group cursor-pointer">
+                            <i class="fa-brands fa-git-alt text-3xl text-red-400 group-hover:scale-125 transition-transform"></i>
+                            <span class="text-sm font-bold text-white">Git & GitHub</span>
+                            <span class="text-[11px] text-gray-400 font-mono">Version Control</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 px-6 relative">
+            <div class="max-w-5xl mx-auto space-y-12">
+                <div class="text-center space-y-3">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// CAREER JOURNEY</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Professional Experience</h2>
+                </div>
+
+                <div class="relative border-l-2 border-cyan-500/30 ml-4 md:ml-32 space-y-10">
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-cyan-400 flex items-center justify-center text-cyan-400 text-xs shadow-lg group-hover:bg-cyan-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">NexSoft Solutions</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 w-fit">Remote Internship</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Full Stack Web Development Intern</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Contributed to real-world web applications, assisting in developing backend architectures, writing scalable APIs, and crafting responsive client interfaces.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">.NET</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">C#</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">SQL Server</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-purple-400 flex items-center justify-center text-purple-400 text-xs shadow-lg group-hover:bg-purple-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">FentixTech</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-500/10 text-purple-300 border border-purple-500/30 w-fit">Remote Internship</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Web Developer Intern</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Developed dynamic web pages, integrated databases, optimized backend routines, and collaborated in an agile development workflow.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">PHP</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">MySQL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8 group">
+                        <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-xs shadow-lg group-hover:bg-emerald-400 group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h3 class="text-xl font-bold text-white">Client Projects & E-Commerce Platforms</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 w-fit">Production Work</span>
+                            </div>
+                            <p class="text-xs font-mono text-gray-400">Freelance / Contract Full Stack Developer</p>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Successfully delivered custom web solutions and e-commerce platforms tailored to client specifications, incorporating cart workflows, user authentication, and admin dashboards.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">MERN Stack</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">REST APIs</span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-white/5 text-gray-300">Tailwind CSS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="achievements" class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// RECOGNITION</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Honors & Achievements</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-cyan-500/20 hover:border-cyan-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Student of the Month</h3>
+                            <p class="text-xs font-mono text-cyan-400">Aptech Academic Excellence</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Recognized for outstanding technical performance, problem-solving skills, and dedication during web development training.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-purple-500/20 hover:border-purple-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Project of the Month</h3>
+                            <p class="text-xs font-mono text-purple-400">Best Web Application</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Awarded top project honors for designing and building an outstanding full stack web application prototype.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-blue-500/20 hover:border-blue-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">IT Vision Competition</h3>
+                            <p class="text-xs font-mono text-blue-400">Participant</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Showcased creative tech solutions and software engineering methodologies in competitive IT challenges.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4 border border-emerald-500/20 hover:border-emerald-400 relative overflow-hidden group">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-lg font-bold text-white">Techvise Competition</h3>
+                            <p class="text-xs font-mono text-emerald-400">Participant</p>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Engaged with fellow developers, building innovative concepts under structured competition deadlines.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 px-6 relative">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// PORTFOLIO WORK</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Featured Projects</h2>
+                    <p class="text-gray-400 text-sm">Explore interactive project demos and technical walkthroughs.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1: AI Interviewer -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/AI_InterviwerPic.png" alt="AI Interviewer Platform" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('AI Interviewer System', 'Competition entry built for IT Vision. An automated AI-assisted interviewing system evaluating candidate responses and skills.', ['.NET Core', 'C#', 'AI Integration', 'SQL Server'], 'assets/AI_InterviwerVedio.mp4')" class="px-5 py-2.5 rounded-full bg-cyan-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">.NET Core & AI</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Competition</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">AI Interviewer Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">IT Vision competition project providing automated interview assessments and response evaluations.</p>
+                            </div>
+                            <button onclick="openDemoModal('AI Interviewer System', 'Competition entry built for IT Vision. An automated AI-assisted interviewing system evaluating candidate responses and skills.', ['.NET Core', 'C#', 'AI Integration', 'SQL Server'], 'assets/AI_InterviwerVedio.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-cyan-300 hover:bg-cyan-500 hover:text-black transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Bags E-Commerce Platform -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/bag3 - Copy.png" alt="Client Bags E-Commerce Platform" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Client Bags E-Commerce Platform', 'Custom e-commerce solution built for selling bags, featuring product catalog, cart logic, and administrative dashboard.', ['.NET Core', 'C#', 'SQL Server', 'Tailwind'], 'assets/bag2.mp4')" class="px-5 py-2.5 rounded-full bg-purple-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">.NET Core</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Client Work</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">Bags E-Commerce Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Client production project for selling bags with custom web layout and relational database backend.</p>
+                            </div>
+                            <button onclick="openDemoModal('Client Bags E-Commerce Platform', 'Custom e-commerce solution built for selling bags, featuring product catalog, cart logic, and administrative dashboard.', ['.NET Core', 'C#', 'SQL Server', 'Tailwind'], 'assets/bag2.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-purple-300 hover:bg-purple-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Bus Reservation System -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/bus1.png" alt="Bus Reservation System" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Bus Reservation System', 'Semester end project engineered for managing bus routes, passenger ticket bookings, seat allocations, and admin panels.', ['.NET Core', 'C#', 'SQL Server', 'Bootstrap'], 'assets/bus.mp4')" class="px-5 py-2.5 rounded-full bg-blue-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">.NET Core</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Semester Project</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">Bus Reservation System</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Comprehensive management system handling ticket booking, routes, and admin schedules.</p>
+                            </div>
+                            <button onclick="openDemoModal('Bus Reservation System', 'Semester end project engineered for managing bus routes, passenger ticket bookings, seat allocations, and admin panels.', ['.NET Core', 'C#', 'SQL Server', 'Bootstrap'], 'assets/bus.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-blue-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+             <!-- Project 4: Burger Website -->
+<div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+
+    <div class="relative overflow-hidden aspect-video">
+        <img 
+            src="assets/burgur1.png" 
+            alt="Animated Burger Experience" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        >
+
+        <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <button 
+                onclick="openDemoModal(
+                    'Animated Burger Experience',
+                    'An immersive animated burger website featuring scroll-driven 3D burger interactions, cinematic transitions, and an interactive food presentation experience.',
+                    ['HTML/CSS', 'JavaScript', 'Tailwind', 'Animation'],
+                    'assets/burgurB.mp4'
+                )"
+                class="px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform"
+            >
+                <i class="fa-solid fa-circle-play text-base"></i>
+                <span>Watch Demo</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+
+        <div class="space-y-2">
+
+            <div class="flex flex-wrap gap-2">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                    Interactive
+                </span>
+
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">
+                    Animation
+                </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                Animated Burger Experience
+            </h3>
+
+            <p class="text-xs text-gray-400 leading-relaxed">
+                A creative food website featuring scroll-driven burger animations, cinematic transitions, interactive storytelling, and an immersive modern user experience.
+            </p>
+
+        </div>
+
+        <button 
+            onclick="openDemoModal(
+                'Animated Burger Experience',
+                'An immersive animated burger website featuring scroll-driven 3D burger interactions, cinematic transitions, and an interactive food presentation experience.',
+                ['HTML/CSS', 'JavaScript', 'Tailwind', 'Animation'],
+                'assets/burgurB.mp4'
+            )"
+            class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-emerald-300 hover:bg-emerald-500 hover:text-black transition-all flex items-center justify-center space-x-2"
+        >
+            <i class="fa-solid fa-play text-xs"></i>
+            <span>Watch Demo</span>
+        </button>
+
+    </div>
+</div>
+
+                    <!-- Project 5: Leather Secret Jackets -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/us.png" alt="Leather Secret Storefront" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Leather Secret Jackets', 'Bespoke US e-commerce platform crafted for premium custom leather outerwear, real-time catalog management, and seamless client checkout.', ['E-Commerce', 'Full Stack', 'Tailwind', 'Stripe API'], 'assets/us2.mp4')" class="px-5 py-2.5 rounded-full bg-amber-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">US Client Production</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Leather & Apparel</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Leather Secret Jackets</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Stylish e-commerce experience tailored for custom luxury leather jackets and premium client ordering.</p>
+                            </div>
+                            <button onclick="openDemoModal('Leather Secret Jackets', 'Bespoke US e-commerce platform crafted for premium custom leather outerwear, real-time catalog management, and seamless client checkout.', ['E-Commerce', 'Full Stack', 'Tailwind', 'Stripe API'], 'assets/us2.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-amber-300 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 6: Shop Nova Clothing -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative overflow-hidden aspect-video">
+                            <img src="assets/cloths.png" alt="Shop Nova Clothing App" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-darkBg/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="openDemoModal('Shop Nova - E-Commerce Clothing', 'An IT Vision competition project built on PHP & MySQL. Custom dynamic clothing e-commerce web platform with interactive catalog, product filtering, and shopping cart.', ['PHP', 'MySQL', 'JavaScript', 'Tailwind'], 'assets/cloths.mp4')" class="px-5 py-2.5 rounded-full bg-yellow-500 text-black font-semibold text-xs flex items-center space-x-2 shadow-lg hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-circle-play text-base"></i>
+                                    <span>Watch Demo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">PHP & MySQL</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-300">Competition</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white group-hover:text-yellow-400 transition-colors">Shop Nova Clothing Platform</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed">Dynamic online clothing store featuring catalog management, user cart logic, and secure checkout handling.</p>
+                            </div>
+                            <button onclick="openDemoModal('Shop Nova - E-Commerce Clothing', 'An IT Vision competition project built on PHP & MySQL. Custom dynamic clothing e-commerce web platform with interactive catalog, product filtering, and shopping cart.', ['PHP', 'MySQL', 'JavaScript', 'Tailwind'], 'assets/cloths.mp4')" class="w-full py-2.5 rounded-xl glass-panel border border-white/10 text-xs font-semibold text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Watch Demo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 relative bg-darkCard/20">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// CORE SERVICES</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">What I Build</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-cyan-500/20 hover:border-cyan-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Full Stack Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            End-to-end web engineering using modern frontend stacks alongside robust backend structures (.NET, PHP, MERN).
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-purple-500/20 hover:border-purple-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500/20 to-pink-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">E-Commerce Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Building secure, responsive online store platforms equipped with cart management, catalog organization, and user checkout tools.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4 border border-emerald-500/20 hover:border-emerald-400 transition-all group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-window-maximize"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Web Application Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Designing and deploying dynamic single-page applications, administrative dashboards, and database-driven solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 px-6 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center space-y-10 relative z-10">
+                <div class="space-y-4 max-w-3xl mx-auto">
+                    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">// LET'S CONNECT</span>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight">
+                        Let's build something <span class="text-gradient">amazing.</span>
+                    </h2>
+                    <p class="text-gray-300 text-base md:text-lg leading-relaxed">
+                        I am currently looking for full-time and remote opportunities where I can contribute, learn, and build meaningful digital experiences.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+                    <a href="mailto:muskan.mushtaq.dev@example.com" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-cyan-500/30 hover:border-cyan-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-solid fa-envelope text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>Email Me</span>
+                    </a>
+
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-blue-500/30 hover:border-blue-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-brands fa-linkedin text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>LinkedIn</span>
+                    </a>
+
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card border border-purple-500/30 hover:border-purple-400 flex items-center justify-center space-x-3 text-white font-semibold group transition-all duration-300 hover:scale-105">
+                        <i class="fa-brands fa-github text-purple-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-8 px-6 border-t border-white/10 relative z-10 text-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-500">
+            <div>© Muskan Mushtaq • Full Stack Web Developer</div>
+            <div class="flex space-x-4">
+                <span>.NET</span>
+                <span>PHP</span>
+                <span>MERN</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Circular Button -->
+    <button id="backToTopBtn" class="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full glass-panel border border-cyan-400/40 text-cyan-400 flex items-center justify-center shadow-xl opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 hover:bg-cyan-400 hover:text-black">
+        <i class="fa-solid fa-arrow-up text-lg"></i>
+    </button>
+
+    <!-- SINGLE WORKING REAL VIDEO DEMO MODAL -->
+    <div id="demoModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 sm:p-8">
+        <div class="relative w-full max-w-4xl glass-panel border border-white/20 rounded-3xl overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-white/10 flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-white" id="modalTitle">Project Demo</h3>
+                    <p class="text-xs font-mono text-cyan-400" id="modalSub">Walkthrough & Showcase</p>
+                </div>
+                <button onclick="closeDemoModal()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Video Player -->
+            <div class="p-6 space-y-6 overflow-y-auto">
+                <div class="relative aspect-video rounded-2xl overflow-hidden bg-darkBg border border-white/10 flex items-center justify-center">
+                    <video id="modalVideoPlayer" controls class="w-full h-full object-cover">
+                        <source src="" id="modalVideoSource" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold text-white">Project Highlights</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed" id="modalDesc">Detailed project explanation and technical architectural breakdown.</p>
+                    <div class="pt-2 flex flex-wrap gap-2" id="modalTechBadges">
+                        <!-- Badges populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Execution -->
+    <script>
+    /* Ambient Particle Canvas Simulation */
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let particles = [];
+
+    function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * (canvas ? canvas.width : 1000);
+            this.y = Math.random() * (canvas ? canvas.height : 1000);
+            this.size = Math.random() * 1.8 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (canvas) {
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+        }
+        draw() {
+            if (!ctx) return;
+            ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        if (!canvas) return;
+        particles = [];
+        const count = Math.min(Math.floor(window.innerWidth / 20), 60);
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+    initParticles();
+
+    function animateParticles() {
+        if (!ctx || !canvas) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* Dynamic Rotating Text in Hero */
+    const textArray = [".NET Developer", "PHP Developer", "MERN Stack Developer", "Web Application Developer"];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const rotatingTextEl = document.getElementById('rotatingText');
+
+    function typeEffect() {
+        if (!rotatingTextEl) return;
+        const currentText = textArray[textIndex];
+        if (isDeleting) {
+            rotatingTextEl.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            rotatingTextEl.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        let typeSpeed = isDeleting ? 40 : 80;
+
+        if (!isDeleting && charIndex === currentText.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % textArray.length;
+            typeSpeed = 500;
+        }
+
+        setTimeout(typeEffect, typeSpeed);
+    }
+    typeEffect();
+
+    /* Mouse Parallax Effect on Hero Card */
+    const heroCard = document.getElementById('parallaxCard');
+    const heroContainer = document.getElementById('heroVisualContainer');
+
+    if (heroContainer && heroCard) {
+        heroContainer.addEventListener('mousemove', (e) => {
+            const rect = heroContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            heroCard.style.transform = `rotateY(${x * 0.05}deg) rotateX(${-y * 0.05}deg)`;
+        });
+
+        heroContainer.addEventListener('mouseleave', () => {
+            heroCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    }
+
+    /* Mobile Drawer Logic */
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    function openDrawer() {
+        if (mobileDrawer) mobileDrawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        if (mobileDrawer) mobileDrawer.classList.add('translate-x-full');
+        document.body.style.overflow = 'auto';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+
+    /* Back to Top Button Logic */
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (backToTopBtn) {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+    });
+
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    /* REAL VIDEO DEMO MODAL FUNCTIONALITY */
+    const demoModal = document.getElementById('demoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalTechBadges = document.getElementById('modalTechBadges');
+    const modalVideoPlayer = document.getElementById('modalVideoPlayer');
+    const modalVideoSource = document.getElementById('modalVideoSource');
+
+    function openDemoModal(title, description, techList, videoUrl) {
+        if (modalTitle) modalTitle.textContent = title;
+        if (modalDesc) modalDesc.textContent = description;
+        
+        if (modalTechBadges) {
+            modalTechBadges.innerHTML = '';
+            techList.forEach(tech => {
+                const badge = document.createElement('span');
+                badge.className = 'px-2.5 py-1 rounded-md text-[11px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30';
+                badge.textContent = tech;
+                modalTechBadges.appendChild(badge);
+            });
+        }
+
+        // Load & Play real video
+        if (modalVideoPlayer && modalVideoSource && videoUrl) {
+            modalVideoSource.src = videoUrl;
+            modalVideoPlayer.load();
+            modalVideoPlayer.play().catch(e => console.log("Video autoplay handled:", e));
+        }
+
+        if (demoModal) {
+            demoModal.classList.remove('opacity-0', 'pointer-events-none');
+            demoModal.classList.add('opacity-100', 'pointer-events-auto');
+        }
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDemoModal() {
+        if (demoModal) {
+            demoModal.classList.remove('opacity-100', 'pointer-events-auto');
+            demoModal.classList.add('opacity-0', 'pointer-events-none');
+        }
+        document.body.style.overflow = 'auto';
+
+        // Pause video on modal close
+        if (modalVideoPlayer && modalVideoSource) {
+            modalVideoPlayer.pause();
+            modalVideoSource.src = "";
+        }
+    }
+
+    /* Animated Statistics Counter */
+    const counters = document.querySelectorAll('.counter');
+    let counterAnimated = false;
+
+    window.addEventListener('scroll', () => {
+        if (counters.length === 0) return;
+
+        const statsSection = counters[0];
+        const rect = statsSection.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && !counterAnimated) {
+            counterAnimated = true;
+
+            counters.forEach(counter => {
+                const attrValue = counter.getAttribute('data-target');
+                if (!attrValue) return;
+
+                const target = +attrValue;
+                let count = 0;
+                const speed = target / 20;
+
+                const updateCount = () => {
+                    count += speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count) + '+';
+                        setTimeout(updateCount, 50);
+                    } else {
+                        counter.innerText = target + '+';
+                    }
+                };
+
+                updateCount();
+            });
+        }
+    });
+    </script>
+</body>
+</html>

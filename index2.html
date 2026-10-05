@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muskan Mushtaq | Full Stack Web Developer</title>
+    <meta name="description" content="Portfolio of Muskan Mushtaq - Full Stack Web Developer specializing in .NET, PHP, and MERN Stack.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Space Grotesk"', 'monospace'],
+                    },
+                    colors: {
+                        dark: {
+                            base: '#07090e',
+                            card: '#0d111a',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                        },
+                        accent: {
+                            cyan: '#00f2fe',
+                            purple: '#7928ca',
+                            pink: '#ff0080',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 20s linear infinite',
+                        'spin-reverse': 'spin-reverse 25s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'spin-reverse': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(-360deg)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        'pulseGlow': {
+                            '0%, 100%': { opacity: '0.4' },
+                            '50%': { opacity: '0.8' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* Custom Utilities & Glassmorphism */
+        .glass-panel {
+            background: rgba(13, 17, 26, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-nav {
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #7928ca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-alt {
+            background: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-border {
+            position: relative;
+        }
+        .glow-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(90deg, #00f2fe, #7928ca, #ff0080);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .glow-border:hover::after {
+            opacity: 0.6;
+        }
+        /* Grid background overlay */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 242, 254, 0.4);
+        }
+    </style>
+</head>
+
+<body class="bg-dark-base text-gray-200 font-sans antialiased selection:bg-accent-cyan selection:text-black overflow-x-hidden relative">
+
+    <!-- Ambient Background Lighting Canvas -->
+    <canvas id="ambientCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+    
+    <!-- Background Grid Pattern -->
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0 opacity-60"></div>
+
+    <!-- HEADER / NAVIGATION (Desktop & Mobile) -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent-cyan via-accent-purple to-accent-pink p-[1px] transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-dark-base rounded-[11px] flex items-center justify-center">
+                        <span class="font-mono font-bold text-lg text-white group-hover:text-accent-cyan transition-colors">M</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-base tracking-wide text-white group-hover:text-accent-cyan transition-colors">Muskan Mushtaq</span>
+                    <span class="text-[10px] font-mono text-gray-400 -mt-1">Full Stack Developer</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-1 glass-panel px-4 py-2 rounded-full border border-white/10 shadow-2xl">
+                <a href="#home" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-white bg-white/10 transition-all hover:text-accent-cyan">Home</a>
+                <a href="#about" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">About</a>
+                <a href="#skills" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">Skills</a>
+                <a href="#experience" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">Experience</a>
+                <a href="#achievements" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">Achievements</a>
+                <a href="#projects" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">Projects</a>
+                <a href="#contact" class="nav-link text-xs font-mono px-3 py-1.5 rounded-full text-gray-400 hover:text-white transition-all">Contact</a>
+            </nav>
+
+            <!-- Desktop Actions -->
+            <div class="hidden md:flex items-center gap-3">
+                <a href="Muskan_Mushtaq_Resume.pdf" download="Muskan_Mushtaq_Resume" class="flex items-center gap-2 text-xs font-mono px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-accent-cyan/50 hover:bg-white/10 transition-all group">
+                    <i class="fa-solid fa-download text-accent-cyan group-hover:translate-y-0.5 transition-transform"></i>
+                    <span>Download CV</span>
+                </a>
+                <a href="#contact" class="text-xs font-mono px-4 py-2 rounded-lg bg-gradient-to-r from-accent-cyan to-accent-purple text-black font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-accent-cyan/20">
+                    Let's Connect
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="hamburger-btn" class="md:hidden w-10 h-10 rounded-lg glass-panel flex flex-col items-center justify-center gap-1.5 z-50 text-white hover:text-accent-cyan transition-colors" aria-label="Toggle Navigation">
+                <span class="bar-1 w-5 h-0.5 bg-current transition-all duration-300"></span>
+                <span class="bar-2 w-5 h-0.5 bg-current transition-all duration-300"></span>
+                <span class="bar-3 w-5 h-0.5 bg-current transition-all duration-300"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-md z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="mobile-drawer" class="fixed top-0 right-0 w-[80%] max-w-sm h-full glass-panel border-l border-white/10 z-40 transform translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-8 pt-24 overflow-y-auto">
+        <nav class="flex flex-col gap-4 font-mono text-sm">
+            <a href="#home" class="mobile-nav-item py-2 border-b border-white/5 text-accent-cyan hover:pl-2 transition-all">01. Home</a>
+            <a href="#about" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">02. About</a>
+            <a href="#skills" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">03. Skills</a>
+            <a href="#experience" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">04. Experience</a>
+            <a href="#achievements" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">05. Achievements</a>
+            <a href="#projects" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">06. Projects</a>
+            <a href="#contact" class="mobile-nav-item py-2 border-b border-white/5 text-gray-300 hover:text-white hover:pl-2 transition-all">07. Contact</a>
+        </nav>
+
+        <div class="flex flex-col gap-4 pt-6">
+            <a href="Muskan_Mushtaq_Resume.pdf" download="Muskan_Mushtaq_Resume" class="mobile-nav-item flex items-center justify-center gap-2 py-3 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10">
+                <i class="fa-solid fa-download text-accent-cyan"></i>
+                Download CV
+            </a>
+            <div class="flex items-center justify-center gap-4 text-lg text-gray-400">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-accent-cyan transition-colors" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-accent-cyan transition-colors" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="mailto:muskan@example.com" class="hover:text-accent-cyan transition-colors" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="relative z-10">
+
+        <!-- 1. HERO SECTION -->
+      <section id="home" class="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto flex items-center justify-center">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+        
+        <!-- Hero Left Column -->
+        <div class="lg:col-span-7 flex flex-col items-start gap-6">
+            
+            <!-- Status Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-xs font-mono">
+                <span class="w-2 h-2 rounded-full bg-accent-cyan animate-ping"></span>
+                <span>Open to Full-Time & Remote Opportunities</span>
+            </div>
+
+            <!-- Main Intro Headings -->
+            <div>
+                <h2 class="text-gray-400 text-lg md:text-xl font-mono mb-2">Hi, I'm Muskan Mushtaq</h2>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4">
+                    Full Stack <br>
+                    <span class="text-gradient">Web Developer</span>
+                </h1>
+                <!-- Dynamic Rotating Text -->
+                <div class="h-8 font-mono text-xl sm:text-2xl text-accent-pink flex items-center gap-2">
+                    <span class="text-gray-500">&gt;</span>
+                    <span id="typewriter-text" class="border-r-2 border-accent-pink pr-1">.NET Developer</span>
+                </div>
+            </div>
+
+            <p class="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Passionate about crafting high-performance, accessible, and visually stunning web applications. Specialized in building end-to-end digital solutions with <strong class="text-white">.NET</strong>, <strong class="text-white">PHP</strong>, and the <strong class="text-white">MERN Stack</strong>.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+                <a href="#projects" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-pink text-white font-semibold text-sm hover:opacity-90 transition-all transform hover:-translate-y-0.5 shadow-xl shadow-accent-purple/20">
+                    Explore My Work
+                </a>
+                <a href="#contact" class="px-6 py-3.5 rounded-xl glass-panel text-white font-semibold text-sm hover:border-accent-cyan/50 transition-all transform hover:-translate-y-0.5">
+                    Let's Connect
+                </a>
+                <a href="/assets/Muskan-Mushtaq-CV.pdf" download="Muskan_Mushtaq_Resume" class="px-6 py-3.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold text-sm transition-all transform hover:-translate-y-0.5 flex items-center gap-2 group">
+                    <i class="fa-solid fa-download text-accent-cyan group-hover:translate-y-0.5 transition-transform"></i>
+                    <span>Download CV</span>
+                </a>
+            </div>
+
+            <!-- Tech Stack Quick Glance -->
+            <div class="pt-6 border-t border-white/5 w-full flex items-center gap-6 text-gray-500 font-mono text-xs">
+                <span>CORE TECHS:</span>
+                <div class="flex items-center gap-4 text-gray-400 text-lg">
+                    <i class="fa-brands fa-react hover:text-accent-cyan transition-colors" title="React"></i>
+                    <i class="fa-brands fa-node-js hover:text-accent-cyan transition-colors" title="Node.js"></i>
+                    <i class="fa-brands fa-php hover:text-accent-cyan transition-colors" title="PHP"></i>
+                    <i class="fa-solid fa-code hover:text-accent-cyan transition-colors" title=".NET / C#"></i>
+                    <i class="fa-brands fa-database hover:text-accent-cyan transition-colors" title="MongoDB / SQL"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Right Column: Developer Identity Visual -->
+        <div class="lg:col-span-5 flex items-center justify-center relative">
+            <div id="hero-visual-container" class="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center">
+                
+                <!-- Glowing Radial Aura -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-accent-cyan/20 via-accent-purple/20 to-accent-pink/20 rounded-full blur-3xl animate-pulse-glow"></div>
+
+                <!-- Outer Orbit Ring (Clockwise) -->
+                <div class="absolute inset-0 rounded-full border border-dashed border-accent-cyan/30 animate-spin-slow"></div>
+                
+                <!-- Inner Orbit Ring (Counter Clockwise) -->
+                <div class="absolute inset-6 rounded-full border border-dotted border-accent-purple/40 animate-spin-reverse"></div>
+
+                <!-- Central Glass Profile Frame -->
+                <div class="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full p-1 bg-gradient-to-tr from-accent-cyan via-accent-purple to-accent-pink shadow-2xl animate-float">
+                    <div class="w-full h-full rounded-full bg-dark-card overflow-hidden relative flex items-center justify-center border-2 border-white/10">
+                        
+                        <!-- Profile Image Added Here -->
+                        <img src="assets/AI_InterviwerPic.png" alt="Muskan Mushtaq" class="w-full h-full object-cover">
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-base/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-0 right-0 text-center">
+                            <span class="text-xs font-mono font-bold text-white bg-black/60 px-3 py-1 rounded-full border border-white/10">Muskan M.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Tech Nodes around Orbit -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-3 glass-panel px-2.5 py-1 rounded-lg text-xs font-mono text-accent-cyan flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-brands fa-react"></i> React
+                </div>
+                <div class="absolute bottom-4 right-0 glass-panel px-2.5 py-1 rounded-lg text-xs font-mono text-accent-pink flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-brands fa-php"></i> PHP
+                </div>
+                <div class="absolute top-1/3 left-0 -translate-x-4 glass-panel px-2.5 py-1 rounded-lg text-xs font-mono text-purple-400 flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-solid fa-code"></i> .NET
+                </div>
+                <div class="absolute bottom-10 left-4 glass-panel px-2.5 py-1 rounded-lg text-xs font-mono text-green-400 flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-brands fa-node"></i> Node.js
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- 2. ABOUT SECTION -->
+ <section id="about" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Visual Accent -->
+        <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-full max-w-md glass-panel p-8 rounded-3xl border border-white/10 overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-accent-cyan/10 rounded-full blur-2xl group-hover:bg-accent-cyan/20 transition-all"></div>
+                
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-accent-cyan to-accent-purple p-0.5 overflow-hidden flex-shrink-0">
+                        <div class="w-full h-full bg-dark-base rounded-[14px] overflow-hidden flex items-center justify-center">
+                            <!-- YAHAN PIC ADD KI HAI -->
+                            <img src="assets/AI_InterviwerPic.png" alt="Muskan Mushtaq" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Muskan Mushtaq</h3>
+                        <p class="text-xs font-mono text-gray-400">Full Stack Engineer</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 font-mono text-xs text-gray-300">
+                    <div class="flex justify-between py-2 border-b border-white/5">
+                        <span class="text-gray-500">Education:</span>
+                        <span>2nd Year Commerce</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-white/5">
+                        <span class="text-gray-500">Specialization:</span>
+                        <span>Aptech — Full Stack Dev</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-white/5">
+                        <span class="text-gray-500">Core Focus:</span>
+                        <span class="text-accent-cyan">.NET • PHP • MERN</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-gray-500">Experience:</span>
+                        <span>2 Internships | 2 Client Projects</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Narrative -->
+        <div class="lg:col-span-7 flex flex-col items-start gap-6">
+            <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest">
+                <span>// 01. About Me</span>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">Crafting Seamless Digital Experiences From Front to Back</h2>
+            
+            <p class="text-gray-400 leading-relaxed text-base">
+                I’m Muskan Mushtaq, a dedicated Full Stack Web Developer driven by a passion for solving complex web challenges and creating sleek, accessible digital solutions. I hold formal expertise in Full Stack Development from Aptech, coupled with a solid foundation in Commerce.
+            </p>
+            <p class="text-gray-400 leading-relaxed text-base">
+                Throughout my professional journey, I’ve completed <strong class="text-white">2 remote internships</strong>, delivered <strong class="text-white">2 real-world client projects</strong>, and developed multiple full-scale web platforms including e-commerce engines and administrative dashboards.
+            </p>
+
+            <!-- Highlights Badge Grid -->
+            <div class="grid grid-cols-2 gap-4 w-full pt-4">
+                <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center gap-3">
+                    <i class="fa-solid fa-briefcase text-accent-cyan text-lg"></i>
+                    <span class="text-xs font-mono text-gray-300">Remote Internship Experience</span>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-white/5 flex items-center gap-3">
+                    <i class="fa-solid fa-cart-shopping text-accent-pink text-lg"></i>
+                    <span class="text-xs font-mono text-gray-300">E-Commerce Development</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- 3. PROFESSIONAL STATS SECTION -->
+        <section class="py-12 px-6 max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden group">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-gradient mb-2 font-mono counter" data-target="2">0</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-wider">Remote Internships</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden group">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-gradient mb-2 font-mono counter" data-target="2">0</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-wider">Client Projects</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden group">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-gradient mb-2 font-mono counter" data-target="6">0</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-wider">Featured Projects</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-center relative overflow-hidden group">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-gradient mb-2 font-mono counter" data-target="10">0</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-wider">Web Apps Built+</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SKILLS CONSTELLATION SECTION -->
+        <section id="skills" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest mb-3">
+                    <span>// 02. Technical Toolkit</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Interactive Tech Constellation</h2>
+                <p class="text-gray-400 text-sm mt-2">Hover over technology nodes to explore my technical skill matrix.</p>
+            </div>
+
+            <!-- Constellation Layout -->
+            <div class="relative glass-panel rounded-3xl p-8 sm:p-12 border border-white/10 overflow-hidden">
+                <!-- Center Core Badge -->
+                <div class="flex justify-center mb-12">
+                    <div class="px-6 py-2.5 rounded-full bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-pink text-black font-mono font-bold text-sm tracking-widest shadow-xl">
+                        FULL STACK CORE
+                    </div>
+                </div>
+
+                <!-- Interactive Tech Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    
+                    <!-- HTML5 -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-html5 text-3xl text-orange-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">HTML5</span>
+                        <span class="text-[10px] text-gray-500">Semantic & Accessible</span>
+                    </div>
+
+                    <!-- CSS3 -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-css3-alt text-3xl text-blue-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">CSS3</span>
+                        <span class="text-[10px] text-gray-500">Responsive Layouts</span>
+                    </div>
+
+                    <!-- JavaScript -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-js text-3xl text-yellow-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">JavaScript</span>
+                        <span class="text-[10px] text-gray-500">ES6+ & Async JS</span>
+                    </div>
+
+                    <!-- PHP -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-php text-3xl text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">PHP</span>
+                        <span class="text-[10px] text-gray-500">Server-Side Scripts</span>
+                    </div>
+
+                    <!-- MySQL -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-solid fa-database text-3xl text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">MySQL</span>
+                        <span class="text-[10px] text-gray-500">Relational DB</span>
+                    </div>
+
+                    <!-- C# -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-solid fa-code text-3xl text-purple-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">C#</span>
+                        <span class="text-[10px] text-gray-500">Object Oriented</span>
+                    </div>
+
+                    <!-- .NET Core -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-solid fa-layer-group text-3xl text-purple-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">ASP.NET Core</span>
+                        <span class="text-[10px] text-gray-500">Enterprise Backend</span>
+                    </div>
+
+                    <!-- React -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-react text-3xl text-accent-cyan group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">React</span>
+                        <span class="text-[10px] text-gray-500">SPA Architecture</span>
+                    </div>
+
+                    <!-- Node.js -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-node text-3xl text-green-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">Node.js</span>
+                        <span class="text-[10px] text-gray-500">RESTful APIs</span>
+                    </div>
+
+                    <!-- MongoDB -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-solid fa-[#47A248] text-3xl text-green-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">MongoDB</span>
+                        <span class="text-[10px] text-gray-500">NoSQL Database</span>
+                    </div>
+
+                    <!-- Bootstrap -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-bootstrap text-3xl text-purple-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">Bootstrap</span>
+                        <span class="text-[10px] text-gray-500">Rapid UI Styling</span>
+                    </div>
+
+                    <!-- Git & GitHub -->
+                    <div class="skill-card glass-panel p-4 rounded-xl border border-white/5 hover:border-accent-cyan/50 hover:bg-white/10 transition-all flex flex-col items-center gap-2 text-center group cursor-pointer">
+                        <i class="fa-brands fa-github text-3xl text-white group-hover:scale-110 transition-transform"></i>
+                        <span class="font-mono text-xs text-white font-semibold">Git & GitHub</span>
+                        <span class="text-[10px] text-gray-500">Version Control</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. EXPERIENCE SECTION -->
+        <section id="experience" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest mb-3">
+                    <span>// 03. Professional History</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Work Experience</h2>
+            </div>
+
+            <!-- Experience Timeline -->
+            <div class="max-w-3xl mx-auto relative border-l-2 border-white/10 pl-6 sm:pl-8 space-y-12">
+                
+                <!-- Experience Item 1 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-accent-cyan shadow-lg shadow-accent-cyan/50 group-hover:scale-125 transition-transform"></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-white">NexSoft Solutions</h3>
+                            <span class="px-3 py-1 rounded-full bg-accent-cyan/10 text-accent-cyan font-mono text-xs">Remote Internship</span>
+                        </div>
+                        <p class="text-xs font-mono text-gray-400 mb-4">Full Stack Developer Intern</p>
+                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                            <li>Collaborated on building modern web software modules and client UI interfaces.</li>
+                            <li>Integrated backend APIs with frontend components and assisted in database query optimization.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-accent-purple shadow-lg shadow-accent-purple/50 group-hover:scale-125 transition-transform"></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-white">FentixTech</h3>
+                            <span class="px-3 py-1 rounded-full bg-accent-purple/10 text-accent-purple font-mono text-xs">Remote Internship</span>
+                        </div>
+                        <p class="text-xs font-mono text-gray-400 mb-4">Web Development Intern</p>
+                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                            <li>Developed dynamic web pages using PHP and frontend frameworks.</li>
+                            <li>Worked closely with senior developers to review code quality and maintain repository hygiene.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Client Work Placeholder -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-accent-pink shadow-lg shadow-accent-pink/50 group-hover:scale-125 transition-transform"></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-white">Independent Client Projects</h3>
+                            <span class="px-3 py-1 rounded-full bg-accent-pink/10 text-accent-pink font-mono text-xs">Freelance</span>
+                        </div>
+                        <p class="text-xs font-mono text-gray-400 mb-4">Full Stack Web Solutions</p>
+                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                            <li>Engineered 2 custom full-stack client web applications including e-commerce platform interfaces.</li>
+                            <li>Delivered pixel-perfect responsive layouts tailored to business client specifications.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ACHIEVEMENTS SECTION -->
+        <section id="achievements" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest mb-3">
+                    <span>// 04. Recognition</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Key Achievements</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Achievement 1 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-start gap-4 hover:border-accent-cyan/50 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/10 text-accent-cyan flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Student of the Month</h3>
+                        <p class="text-xs text-gray-400">Awarded for exceptional academic performance and coding dedication at Aptech.</p>
+                    </div>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-start gap-4 hover:border-accent-purple/50 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-accent-purple/10 text-accent-purple flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Project of the Month</h3>
+                        <p class="text-xs text-gray-400">Recognized for delivering outstanding full-stack web application showcase architecture.</p>
+                    </div>
+                </div>
+
+                <!-- Achievement 3 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-start gap-4 hover:border-accent-pink/50 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-accent-pink/10 text-accent-pink flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">IT Vision Competition</h3>
+                        <p class="text-xs text-gray-400">Participated and demonstrated innovative technical web solutions.</p>
+                    </div>
+                </div>
+
+                <!-- Achievement 4 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-start gap-4 hover:border-accent-cyan/50 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/10 text-accent-cyan flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Techvise Event</h3>
+                        <p class="text-xs text-gray-400">Active participant in tech hackathons and developer showcase events.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. SERVICES SECTION -->
+        <section class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest mb-3">
+                    <span>// 05. Capabilities</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Services Offered</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col items-start gap-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-accent-cyan/10 text-accent-cyan flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Full Stack Development</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">End-to-end web application development using modern stacks (.NET, PHP, MERN) with robust database design and clean REST APIs.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-accent-purple/50 transition-all flex flex-col items-start gap-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-accent-purple/10 text-accent-purple flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">E-Commerce Platforms</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Functional, secure, and user-centric e-commerce solutions complete with shopping carts, product catalogs, and user management.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-accent-pink/50 transition-all flex flex-col items-start gap-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-accent-pink/10 text-accent-pink flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Web Application Dev</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Custom interactive web tools and dynamic dashboard applications built for optimal speed, scalability, and device responsiveness.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. PROJECTS SHOWCASE SECTION WITH VIDEO MODAL -->
+<section id="projects" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest mb-3">
+            <span>// 06. Featured Work</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white">Project Showcase</h2>
+        <p class="text-gray-400 text-sm mt-2">Click "Watch Demo" on any project card to view an interactive video presentation.</p>
+    </div>
+
+    <!-- Grid of 6 Featured Projects -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Project 1: E-Commerce Platform -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt="E-Commerce Platform" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('E-Commerce Platform', 'Full-featured online store engine complete with responsive product catalog, dynamic shopping cart, and checkout workflows.', ['PHP', 'MySQL', 'Bootstrap'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">E-Commerce Platform</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Functional online shopping platform with cart management and product administrative interfaces.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-cyan">PHP</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-cyan">MySQL</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-cyan">Bootstrap</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2: Full Stack Web Application -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt="Full Stack Web Application" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('Full Stack Web Application', 'Comprehensive web portal supporting secure authentication, user roles, and operational dashboard analytics.', ['MERN Stack', 'Node.js', 'MongoDB'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Full Stack Web Application</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Dynamic web app built for seamless data management and user interaction tracking.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-purple">React</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-purple">Node.js</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-purple">MongoDB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 3: .NET Web Application -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt=".NET Web Application" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('.NET Web Application', 'Enterprise-grade backend management web portal with SQL Server integration and ASP.NET Core MVC architecture.', ['ASP.NET Core', 'C#', 'SQL Server'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">.NET Web Application</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Robust database-driven application built using ASP.NET Core framework.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-pink">ASP.NET</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-pink">C#</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-pink">SQL Server</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 4: PHP Web Application -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt="PHP Web Application" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('PHP Web Application', 'Custom content management portal utilizing server-side PHP scripting and relational database queries.', ['PHP', 'MySQL', 'JavaScript'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">PHP Web Application</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Server-side web system providing dynamic data rendering and user portal management.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-cyan">PHP</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-cyan">MySQL</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 5: MERN Stack Project -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt="MERN Stack Project" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('MERN Stack Project', 'Single page application featuring reactive UI state, REST API backend, and MongoDB document database.', ['MongoDB', 'Express', 'React', 'Node'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">MERN Stack Project</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Modern reactive application leveraging complete Javascript ecosystem.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-green-400">React</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-green-400">Express</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-green-400">MongoDB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 6: Client Project -->
+        <div class="project-card glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-accent-cyan/50 transition-all flex flex-col group">
+            <div class="relative h-48 bg-dark-card overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-transparent to-transparent z-10 opacity-60"></div>
+                <div class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="assets/AI_InterviwerPic.png" alt="Client Project" class="w-full h-full object-cover">
+                </div>
+                <button onclick="openVideoModal('Client Project', 'Custom tailor-made business application delivered according to specific client business criteria.', ['Full Stack', 'Tailwind', 'Database'], 'assets/AI_InterviwerVedio.mp4')" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                    <span class="px-4 py-2 rounded-full bg-accent-cyan text-black font-mono font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-play"></i> Watch Demo
+                    </span>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Client Project</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Tailored digital solution engineered for client operational workflows.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-pink">Full Stack</span>
+                    <span class="px-2.5 py-1 rounded-md bg-white/5 text-accent-pink">Client Work</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+        <!-- 9. CONTACT & FINAL CTA SECTION -->
+        <section id="contact" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5 text-center relative overflow-hidden">
+            <div class="max-w-3xl mx-auto flex flex-col items-center gap-8 relative z-10">
+                
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-accent-cyan uppercase tracking-widest">
+                    <span>// 07. Get In Touch</span>
+                </div>
+
+                <h2 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight">
+                    Let's create something <br>
+                    <span class="text-gradient">impactful together.</span>
+                </h2>
+
+                <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl">
+                    I'm currently seeking Full-Time and Remote opportunities where I can contribute my development skills, collaborate with great teams, and build meaningful digital experiences.
+                </p>
+
+                <!-- Direct Action Buttons (No Contact Form as requested) -->
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+                    <a href="mailto:muskan@example.com" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-pink text-white font-semibold text-sm hover:opacity-90 transition-all flex items-center gap-2 shadow-xl shadow-accent-purple/20">
+                        <i class="fa-solid fa-envelope"></i> Email Me
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl glass-panel text-white font-semibold text-sm hover:border-accent-cyan/50 transition-all flex items-center gap-2">
+                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl glass-panel text-white font-semibold text-sm hover:border-accent-cyan/50 transition-all flex items-center gap-2">
+                        <i class="fa-brands fa-github"></i> GitHub
+                    </a>
+                    <a href="/assets/Muskan-Mushtaq-CV.pdf" download="Muskan-Mushtaq-CV.pdf" class="px-6 py-3.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold text-sm transition-all flex items-center gap-2 group">
+                        <i class="fa-solid fa-download text-accent-cyan group-hover:translate-y-0.5 transition-transform"></i>
+                        <span>Download CV</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-8 px-6 border-t border-white/5 text-center text-xs font-mono text-gray-500 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                © <span id="year">2026</span> Muskan Mushtaq. All rights reserved.
+            </div>
+            <div class="text-gray-400">
+                Full Stack Web Developer • .NET • PHP • MERN
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING BACK TO TOP BUTTON -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full glass-panel border border-white/10 flex items-center justify-center text-white text-lg opacity-0 pointer-events-none transition-all duration-300 z-40 hover:border-accent-cyan hover:text-accent-cyan hover:scale-110 shadow-2xl">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- CINEMATIC VIDEO DEMO MODAL -->
+    <div id="video-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="relative w-full max-w-4xl glass-panel rounded-3xl overflow-hidden border border-white/10 flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-white/10 flex items-center justify-between bg-dark-base/50">
+                <div>
+                    <h3 id="modal-title" class="text-lg font-bold text-white">Project Demo</h3>
+                    <p id="modal-tags" class="text-xs font-mono text-accent-cyan mt-0.5"></p>
+                </div>
+                <button onclick="closeVideoModal()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Video Player -->
+            <div class="relative aspect-video bg-black flex items-center justify-center">
+                <video id="modal-video" class="w-full h-full object-contain" controls>
+                    <source src="" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+
+            <!-- Modal Footer Description -->
+            <div class="p-6 bg-dark-base/50">
+                <p id="modal-description" class="text-xs text-gray-300 leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT & GSAP ANIMATION LOGIC -->
+    <script>
+        // Set dynamic copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Canvas Particles Ambient Animation
+        const canvas = document.getElementById('ambientCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 50; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Hero Typewriter Effect
+        const typewriterWords = [".NET Developer", "PHP Developer", "MERN Stack Developer", "Web App Developer"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typewriterElement = document.getElementById('typewriter-text');
+
+        function typeEffect() {
+            const currentWord = typewriterWords[wordIndex];
+            
+            if (isDeleting) {
+                typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % typewriterWords.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+        typeEffect();
+
+        // Mobile Hamburger Drawer Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const drawerBackdrop = document.getElementById('mobile-drawer-backdrop');
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+
+        function toggleDrawer(open) {
+            if (open) {
+                mobileDrawer.classList.remove('translate-x-full');
+                drawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileDrawer.classList.add('translate-x-full');
+                drawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = !mobileDrawer.classList.contains('translate-x-full');
+            toggleDrawer(!isOpen);
+        });
+
+        drawerBackdrop.addEventListener('click', () => toggleDrawer(false));
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', () => toggleDrawer(false));
+        });
+
+        // Back to top floating button logic
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Video Modal Control
+        const videoModal = document.getElementById('video-modal');
+        const modalVideo = document.getElementById('modal-video');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalTags = document.getElementById('modal-tags');
+
+        function openVideoModal(title, description, tags, videoUrl) {
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+            modalTags.textContent = tags.join(' • ');
+            modalVideo.src = videoUrl;
+            
+            videoModal.classList.remove('opacity-0', 'pointer-events-none');
+            modalVideo.play();
+        }
+
+        function closeVideoModal() {
+            videoModal.classList.add('opacity-0', 'pointer-events-none');
+            modalVideo.pause();
+            modalVideo.src = "";
+        }
+
+        // GSAP Animations Registration & ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Counter Numbers Animation
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            gsap.to(counter, {
+                innerText: target,
+                duration: 2,
+                snap: { innerText: 1 },
+                scrollTrigger: {
+                    trigger: counter,
+                    start: 'top 85%',
+                }
+            });
+        });
+
+        // Section Reveal Animations
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
